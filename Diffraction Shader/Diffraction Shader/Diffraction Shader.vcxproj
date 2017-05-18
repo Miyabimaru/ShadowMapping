@@ -26,6 +26,8 @@
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="material.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ModelView.h" />
     <ClInclude Include="MyGlWindow.h" />
     <ClInclude Include="Sphere.h" />
@@ -33,6 +35,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CheckeredFloor.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="IDrawable.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="LightManager.cpp" />
@@ -46,6 +50,9 @@
   <ItemGroup>
     <None Include="floor.frag" />
     <None Include="floor.vert" />
+    <None Include="modelLoader.frag" />
+    <None Include="modelLoader.vert" />
+    <None Include="modelLoaderTexture.frag" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9F54C3E9-1766-4932-B95B-2AB99EE0B851}</ProjectGuid>

@@ -5,29 +5,53 @@ static double DEFAULT_VIEW_POINT[3] = { 5, 5, 5 };
 static double DEFAULT_VIEW_CENTER[3] = { 0, 0, 0 };
 static double DEFAULT_UP_VECTOR[3] = { 0, 1, 0 };
 
-static void my_static_callback(Fl_Widget *w, void *f) {
+static void AddModelCallback(Fl_Widget *w, void *f) {
 	((MyGlWindow *)f)->callback();
 	((MyGlWindow *)f)->loadModel();
+}
+
+static void DeleteModelCallback(Fl_Widget *w, void *f) {
+	((MyGlWindow *)f)->callback();
+	((MyGlWindow *)f)->deleteModel();
+}
+
+void MyGlWindow::deleteModel()
+{
+	int index = browser->value();
+	if (index > 0)
+	{
+		modelList.erase(modelList.begin() + index - 1);
+		browser->remove(index);
+		this->initialize();
+		this->redraw();
+	}
 }
 
 void MyGlWindow::loadModel()
 {
 	char *pathFile = fl_file_chooser("Select a file", "*.obj", 0);
-	input->value(pathFile);
-	//m_3DModel = new ModelLoader(pathFile);
-	//this->initialize();
-	//this->redraw();
+	std::string path = std::string(pathFile);
+	std::string fileName = path.substr(path.find_last_of('/') + 1, path.find_last_of('.') - path.find_last_of('/') - 1);
+	const char *c_fileName = fileName.c_str();
+	browser->add(c_fileName);
+	ModelLoader *m_3DModel = new ModelLoader(pathFile, c_fileName);
+	modelList.push_back(m_3DModel);
+	this->initialize();
+	this->redraw();
 }
 
 MyGlWindow::MyGlWindow(int x, int y, int w, int h)
 : Fl_Gl_Window(x, y, w, h)
 //==========================================================================
 {	
-	input = new Fl_Input(150, w - 10, w - 150, 20, "");
-	input->deactivate();
+	browser = new Fl_Browser(w + 20, 50, 250, h/2);
+	browser->type(FL_HOLD_BROWSER);
 
-	Fl_Button *button = new Fl_Button(20, w - 15, 100, 30, "Load a model");
-	button->callback(my_static_callback, (void *)this);
+	Fl_Button *buttonAddModel = new Fl_Button(w + 20, 10, 115, 30, "Load a model");
+	buttonAddModel->callback(AddModelCallback, (void *)this);
+
+	Fl_Button *buttonDeleteModel = new Fl_Button(w + 140, 10, 125, 30, "Delete a model");
+	buttonDeleteModel->callback(DeleteModelCallback, (void *)this);
 
 	mode(FL_RGB | FL_ALPHA | FL_DOUBLE | FL_STENCIL);
 	first = 0;
@@ -81,19 +105,19 @@ void MyGlWindow::draw(void)
 	if (m_floor)
 		m_floor->draw(m_model.getMatrix(), view, projection);
 
-	// An example when the model will be loaded
-	/*
 	m_model.glPushMatrix();
-
 	m_model.glTranslate(0, 1, 0);
-	glm::mat4 model = m_model.getMatrix();
 
-	if (m_3DModel)
-		m_3DModel->draw(m_model.getMatrix(), view, projection);
-
+	if (modelList.size() > 0)
+	{
+		for each (ModelLoader *model in modelList)
+		{
+			m_model.glTranslate(2, 0, 0);
+			model->draw(m_model.getMatrix(), view, projection);
+		}
+	}
 
 	m_model.glPopMatrix();
-	*/
 }
 
 MyGlWindow::~MyGlWindow()

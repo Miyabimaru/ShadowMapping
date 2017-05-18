@@ -33,6 +33,10 @@
     <ClInclude Include="Viewer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ModelLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
     <ClInclude Include="IDrawable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -65,6 +69,10 @@
     <ClCompile Include="Viewer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ModelLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
     <ClCompile Include="IDrawable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -86,6 +94,15 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="floor.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="modelLoader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="modelLoader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="modelLoaderTexture.frag">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
