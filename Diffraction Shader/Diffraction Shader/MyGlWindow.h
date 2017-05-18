@@ -25,6 +25,7 @@
 #include "Viewer.h"
 #include "ModelView.h"
 #include "CheckeredFloor.h"
+#include "ModelLoader.h"
 
 #pragma warning(pop)
 
@@ -32,10 +33,12 @@
 class MyGlWindow : public Fl_Gl_Window {
 public:
 	void loadModel();
+	void deleteModel();
 	MyGlWindow(int x, int y, int w, int h);
 	~MyGlWindow();
 
-	Fl_Input *input;
+	Fl_Browser *browser;
+	std::vector<ModelLoader *> modelList;
 
 private:
 	void draw();

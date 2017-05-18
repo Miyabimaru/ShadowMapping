@@ -33,6 +33,12 @@
     <ClInclude Include="Viewer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ModelLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CheckeredFloor.cpp">
@@ -50,12 +56,27 @@
     <ClCompile Include="Viewer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ModelLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="floor.frag">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="floor.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="modelLoader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="modelLoader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="modelLoaderTexture.frag">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
