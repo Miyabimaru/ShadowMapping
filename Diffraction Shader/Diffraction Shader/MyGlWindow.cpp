@@ -144,6 +144,13 @@ void MyGlWindow::initialize()
 		glm::vec3(1, 1, 1)
 	);
 
+	_lightManager->addPointLight(
+		glm::vec4(0, 50, 0, 1),
+		glm::vec3(1, 0, 0),
+		glm::vec3(1, 0, 0),
+		glm::vec3(1, 0, 0)
+	);
+
 	_sphere1 = new Sphere(1.0, 60, 60, _lightManager, "simple_phong.vert", "simple_phong.frag");
 	m_floor = new checkeredFloor();
 }
