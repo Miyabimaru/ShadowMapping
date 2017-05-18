@@ -19,7 +19,7 @@ struct MaterialInfo {
 };
 
 // Uniform values
-uniform LightInfo Light[5];
+uniform LightInfo PointLights[5];
 uniform MaterialInfo Material;
 
 uniform mat4 MVP;

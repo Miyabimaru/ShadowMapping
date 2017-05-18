@@ -24,11 +24,11 @@ Sphere::~Sphere()
 Sphere::Sphere(float rad, GLuint sl, GLuint st, LightManager * lightManager, std::string vertexShader, std::string fragmentShader) :
 radius(rad), slices(sl), stacks(st), _lightManager(lightManager)
 {
-	glActiveTexture(GL_TEXTURE0);
-	glGenTextures(1, &tex_2d);
-	glBindTexture(GL_TEXTURE_2D, tex_2d);
+	//glActiveTexture(GL_TEXTURE0);
+	//glGenTextures(1, &tex_2d);
+	//glBindTexture(GL_TEXTURE_2D, tex_2d);
 
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	/*glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
@@ -40,7 +40,7 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager)
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	SOIL_free_image_data(image);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);*/
 
 	/*_material = new material(
 		glm::vec3(.1, .1, .1),
@@ -175,10 +175,10 @@ void Sphere::draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)
 	glUniform1fv(shaderProgram->uniform("u_offset"), 1, &uoffset);
 
 	//glEnable(GL_TEXTURE_2D);
-	glActiveTexture(GL_TEXTURE0);
+	//glActiveTexture(GL_TEXTURE0);
 
-	glBindTexture(GL_TEXTURE_2D, tex_2d);
-	glUniform1i(shaderProgram->uniform("Tex1"), 0);
+	//glBindTexture(GL_TEXTURE_2D, tex_2d);
+	//glUniform1i(shaderProgram->uniform("Tex1"), 0);
 
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
