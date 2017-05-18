@@ -22,17 +22,25 @@
     <ClInclude Include="CheckeredFloor.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="IDrawable.h" />
+    <ClInclude Include="PointLight.h" />
+    <ClInclude Include="LightManager.h" />
     <ClInclude Include="Loader.h" />
+    <ClInclude Include="material.h" />
     <ClInclude Include="ModelView.h" />
     <ClInclude Include="MyGlWindow.h" />
+    <ClInclude Include="Sphere.h" />
     <ClInclude Include="Viewer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CheckeredFloor.cpp" />
     <ClCompile Include="IDrawable.cpp" />
+    <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="LightManager.cpp" />
+    <ClCompile Include="material.cpp" />
     <ClCompile Include="ModelView.cpp" />
     <ClCompile Include="MyGlWindow.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Viewer.cpp" />
   </ItemGroup>
   <ItemGroup>

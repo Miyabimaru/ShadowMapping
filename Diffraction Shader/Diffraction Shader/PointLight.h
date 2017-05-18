@@ -15,20 +15,26 @@
 #include "Loader.h"
 #include <vector>
 
-class PointLight
+#include "IDrawable.h"
+
+class PointLight : public IDrawable
 {
-public:
-	struct s_pointlight {
-		glm::vec4 Position;
-		glm::vec3 La;
-		glm::vec3 Ld;
-		glm::vec3 Ls;
-
-		s_pointlight(glm::vec4 p, glm::vec3 la, glm::vec3 ld, glm::vec3 ls);
-	};
+private:
+	GLuint Id;
 
 public:
-	PointLight();
+	glm::vec4 Position;
+	glm::vec3 La;
+	glm::vec3 Ld;
+	glm::vec3 Ls;
+
+// Idrawable Functions
+public:
+	virtual void Initialise(ShaderProgram * shaderProgram);
+	virtual void Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection);
+
+public:
+	PointLight(glm::vec4 p, glm::vec3 la, glm::vec3 ld, glm::vec3 ls, GLuint id);
 	~PointLight();
 };
 
