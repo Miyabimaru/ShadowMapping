@@ -21,7 +21,7 @@ LightManager::~LightManager()
 	}
 }
 
-void LightManager::Initialize(ShaderProgram * shaderProgram)
+void LightManager::Initialise(ShaderProgram * shaderProgram)
 {
 	_shaderProgram = shaderProgram;
 

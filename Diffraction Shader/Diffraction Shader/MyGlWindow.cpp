@@ -108,6 +108,9 @@ void MyGlWindow::draw(void)
 	m_model.glPushMatrix();
 	m_model.glTranslate(0, 1, 0);
 
+	if (_sphere1)
+		_sphere1->draw(m_model.getMatrix(), view, projection);
+
 	if (modelList.size() > 0)
 	{
 		for each (ModelLoader *model in modelList)
@@ -122,12 +125,26 @@ void MyGlWindow::draw(void)
 
 MyGlWindow::~MyGlWindow()
 {
-	delete m_floor;
+	if (_lightManager)
+		delete _lightManager;
+	if (m_floor)
+		delete m_floor;
+	if (_sphere1)
+		delete _sphere1;
 }
 
 
 void MyGlWindow::initialize()
 {
+	_lightManager = new LightManager();
+	_lightManager->addPointLight(
+		glm::vec4(50, 50, 50, 1),
+		glm::vec3(1, 1, 1),
+		glm::vec3(1, 1, 1),
+		glm::vec3(1, 1, 1)
+	);
+
+	_sphere1 = new Sphere(1.0, 60, 60, _lightManager, "simple_phong.vert", "simple_phong.frag");
 	m_floor = new checkeredFloor();
 }
 

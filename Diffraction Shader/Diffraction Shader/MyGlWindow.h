@@ -27,6 +27,10 @@
 #include "CheckeredFloor.h"
 #include "ModelLoader.h"
 
+#include "Sphere.h"
+
+#include "LightManager.h"
+
 #pragma warning(pop)
 
 
@@ -46,7 +50,10 @@ private:
 	void initialize();
 	int first;
 
+	LightManager * _lightManager;
+
 	Viewer *m_viewer;
 	checkeredFloor * m_floor;
+	Sphere * _sphere1;
 	Model m_model;
 };

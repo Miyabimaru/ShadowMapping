@@ -28,7 +28,7 @@ public:
 
 // Idrawable Functions
 public:
-	virtual void Initialize(ShaderProgram * shaderProgram);
+	virtual void Initialise(ShaderProgram * shaderProgram);
 	virtual void Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection);
 
 public:

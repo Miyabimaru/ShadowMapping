@@ -53,6 +53,8 @@
     <None Include="modelLoader.frag" />
     <None Include="modelLoader.vert" />
     <None Include="modelLoaderTexture.frag" />
+    <None Include="simple_phong.frag" />
+    <None Include="simple_phong.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9F54C3E9-1766-4932-B95B-2AB99EE0B851}</ProjectGuid>
