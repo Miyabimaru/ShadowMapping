@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="CheckeredFloor.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="IDrawable.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ModelLoader.h" />
@@ -32,6 +33,7 @@
     <ClCompile Include="CheckeredFloor.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
+    <ClCompile Include="IDrawable.cpp" />
     <ClCompile Include="ModelView.cpp" />
     <ClCompile Include="MyGlWindow.cpp" />
     <ClCompile Include="Source.cpp" />
