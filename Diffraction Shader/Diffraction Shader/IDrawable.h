@@ -4,6 +4,7 @@
 #define _IDRAWABLE_H_
 
 #include "material.h"
+#include "IShader.h"
 #include <glm\glm.hpp>
 
 class IDrawable
@@ -13,11 +14,11 @@ public:
 
 protected:
 	std::string _name;
-	ShaderProgram * _shaderProgram;
+	IShader * _shader;
 
 public:
-	virtual void Initialise(ShaderProgram * shaderProgram) = 0;
-	virtual void Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection) = 0;
+	virtual void Initialise(IShader * shader);
+	virtual void Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection) = 0;
 
 	std::string getName(void);
 };

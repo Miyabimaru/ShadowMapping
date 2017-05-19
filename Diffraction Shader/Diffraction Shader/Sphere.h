@@ -11,24 +11,26 @@
 #include "Loader.h"
 #include "LightManager.h"
 #include "material.h"
+#include "IDrawable.h"
+#include "IShader.h"
 
-
-class Sphere
+class Sphere : public IDrawable
 {
 public:
-	Sphere(LightManager * lightManager, std::string vertexShader, std::string fragmentShader);
-	Sphere(float rad, GLuint sl, GLuint st, LightManager * lightManager, std::string vertexShader, std::string fragmentShader);
-	~Sphere();
+	//virtual void Initialise(IShader * shader);
+	virtual void Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection);
 
-	void setup();
-	void draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection);
+public:
+	Sphere(IShader * shader, LightManager * lightManager, std::string vertexShader, std::string fragmentShader);
+	Sphere(float rad, GLuint sl, GLuint st, IShader * shader, LightManager * lightManager, std::string vertexShader, std::string fragmentShader);
+	~Sphere();
+	
 	int getVertexArrayHandle();
 
 	GLuint VAO, VBO_position, VBO_normal, VBO_tex, IBO;
 	GLuint tex_2d;
 
-	ShaderProgram *shaderProgram;
-
+	IShader * _shader;
 	LightManager * _lightManager;
 	material * _material;
 

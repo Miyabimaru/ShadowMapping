@@ -13,6 +13,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Loader.h"
+#include "IShader.h"
 #include <vector>
 
 class material
@@ -22,12 +23,13 @@ private:
 	glm::vec3 Kd;
 	glm::vec3 Ks;
 	GLfloat Shiness;
+
 public:
 	material(glm::vec3 ka, glm::vec3 kd, glm::vec3 ks, GLfloat shiness);
 	~material();
 
-	void setup(ShaderProgram * shaderProgram);
-	void draw(ShaderProgram * shaderProgram, glm::mat4 & view);
+	void setup(IShader * shader);
+	void draw(IShader * shader, glm::mat4 & view);
 };
 
 #endif /* !_MATERIAL_H_ */

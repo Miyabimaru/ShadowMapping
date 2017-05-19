@@ -21,25 +21,23 @@ LightManager::~LightManager()
 	}
 }
 
-void LightManager::Initialise(ShaderProgram * shaderProgram)
+void LightManager::Initialise(IShader * shader)
 {
-	_shaderProgram = shaderProgram;
-
 	for (int i = 0; i < POINT_LIGHTS_COUNT; i++)
 	{
 		if (_pointLights[i] == nullptr)
 			break;
-		_pointLights[i]->Initialise(shaderProgram);
+		_pointLights[i]->Initialise(shader);
 	}
 }
 
-void LightManager::Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection)
+void LightManager::Draw(IShader * shader, glm::mat4 model, glm::mat4 view, glm::mat4 projection)
 {
 	for (int i = 0; i < POINT_LIGHTS_COUNT; i++)
 	{
 		if (_pointLights[i] == nullptr)
 			break;
-		_pointLights[i]->Draw(model, view, projection);
+		_pointLights[i]->Draw(shader, model, view, projection);
 	}
 }
 

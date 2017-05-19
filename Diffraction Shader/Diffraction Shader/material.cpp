@@ -12,18 +12,18 @@ material::~material()
 {
 }
 
-void material::setup(ShaderProgram * shaderProgram)
+void material::setup(IShader * shader)
 {
-	shaderProgram->addUniform("Material.Ka"); // Ambient reflectivity : vec3
-	shaderProgram->addUniform("Material.Kd"); // Diffuse reflectivity : vec3
-	shaderProgram->addUniform("Material.Ks"); // Specular reflectivity : vec3
-	shaderProgram->addUniform("Material.Shiness"); // Specular shiness factor : float
+	shader->getShaderProgram()->addUniform("Material.Ka"); // Ambient reflectivity : vec3
+	shader->getShaderProgram()->addUniform("Material.Kd"); // Diffuse reflectivity : vec3
+	shader->getShaderProgram()->addUniform("Material.Ks"); // Specular reflectivity : vec3
+	shader->getShaderProgram()->addUniform("Material.Shiness"); // Specular shiness factor : float
 }
 
-void material::draw(ShaderProgram * shaderProgram, glm::mat4 & view)
+void material::draw(IShader * shader, glm::mat4 & view)
 {
-	glUniform3fv(shaderProgram->uniform("Material.Ka"), 1, glm::value_ptr(Ka));
-	glUniform3fv(shaderProgram->uniform("Material.Kd"), 1, glm::value_ptr(Kd));
-	glUniform3fv(shaderProgram->uniform("Material.Ks"), 1, glm::value_ptr(Ks));
-	glUniform1fv(shaderProgram->uniform("Material.Shiness"), 1, &Shiness);
+	glUniform3fv(shader->getShaderProgram()->uniform("Material.Ka"), 1, glm::value_ptr(Ka));
+	glUniform3fv(shader->getShaderProgram()->uniform("Material.Kd"), 1, glm::value_ptr(Kd));
+	glUniform3fv(shader->getShaderProgram()->uniform("Material.Ks"), 1, glm::value_ptr(Ks));
+	glUniform1fv(shader->getShaderProgram()->uniform("Material.Shiness"), 1, &Shiness);
 }

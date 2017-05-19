@@ -20,7 +20,7 @@
 
 #define POINT_LIGHTS_COUNT (5)
 
-class LightManager : public IDrawable
+class LightManager
 {
 public:
 	LightManager();
@@ -28,8 +28,8 @@ public:
 
 // Idrawable Functions
 public:
-	virtual void Initialise(ShaderProgram * shaderProgram);
-	virtual void Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection);
+	virtual void Initialise(IShader * shader);
+	virtual void Draw(IShader * shader, glm::mat4 model, glm::mat4 view, glm::mat4 projection);
 
 public:
 	int getPointLightsCount();

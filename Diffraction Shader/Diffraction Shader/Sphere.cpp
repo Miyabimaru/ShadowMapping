@@ -7,7 +7,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
-Sphere::Sphere(LightManager * lightManager, std::string vertexShader, std::string fragmentShader) : _lightManager(lightManager)
+Sphere::Sphere(IShader * shader, LightManager * lightManager, std::string vertexShader, std::string fragmentShader) : _lightManager(lightManager)
 {
 
 }
@@ -15,14 +15,14 @@ Sphere::Sphere(LightManager * lightManager, std::string vertexShader, std::strin
 
 Sphere::~Sphere()
 {
-	if (shaderProgram) delete shaderProgram;
+	if (_shader) delete _shader;
 	if (_material) delete _material;
 }
 
 
 //set rad = 1.0  sl, st = 60.
-Sphere::Sphere(float rad, GLuint sl, GLuint st, LightManager * lightManager, std::string vertexShader, std::string fragmentShader) :
-radius(rad), slices(sl), stacks(st), _lightManager(lightManager)
+Sphere::Sphere(float rad, GLuint sl, GLuint st, IShader * shader, LightManager * lightManager, std::string vertexShader, std::string fragmentShader) :
+radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader)
 {
 	//glActiveTexture(GL_TEXTURE0);
 	//glGenTextures(1, &tex_2d);
@@ -73,46 +73,45 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager)
 
 
 	//create vao, vbo, ibo here...
-	shaderProgram = new ShaderProgram();
-	shaderProgram->initFromFiles(vertexShader, fragmentShader);
+	_shader->Initialise();
 
 	//create vao
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
 	//add attributes and uniform vars
-	shaderProgram->addAttribute("vertexPosition");
-	shaderProgram->addAttribute("vertexNormal");
+	_shader->getShaderProgram()->addAttribute("vertexPosition");
+	_shader->getShaderProgram()->addAttribute("vertexNormal");
 
 		//light
-	if (_lightManager) _lightManager->Initialise(shaderProgram);
+	if (_lightManager) _lightManager->Initialise(_shader);
 
 		//Material
-	if (_material) _material->setup(shaderProgram);
+	if (_material) _material->setup(_shader);
 
-	shaderProgram->addUniform("ModelViewMatrix"); // View*Model : mat4
-	shaderProgram->addUniform("normalMatrix"); // Normal Matrix : mat3
-	shaderProgram->addUniform("MVP"); // Projection * View * Model : mat4
+	_shader->getShaderProgram()->addUniform("ModelViewMatrix"); // View*Model : mat4
+	_shader->getShaderProgram()->addUniform("normalMatrix"); // Normal Matrix : mat3
+	_shader->getShaderProgram()->addUniform("MVP"); // Projection * View * Model : mat4
 
-	shaderProgram->addUniform("u_offset");
-	shaderProgram->addUniform("uColor");
+	_shader->getShaderProgram()->addUniform("u_offset");
+	_shader->getShaderProgram()->addUniform("uColor");
 
-	shaderProgram->addAttribute("VertexTexCoord");
-	shaderProgram->addUniform("Tex1");
+	_shader->getShaderProgram()->addAttribute("VertexTexCoord");
+	_shader->getShaderProgram()->addUniform("Tex1");
 
 	//create vbo for vertices
 	glGenBuffers(1, &VBO_position);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_position);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * nVerts, v, GL_STATIC_DRAW);
 	glVertexAttribPointer(
-		shaderProgram->attribute("vertexPosition"), // attribute
+		_shader->getShaderProgram()->attribute("vertexPosition"), // attribute
 		3,                 // number of elements per vertex, here (x,y,z,1)
 		GL_FLOAT,          // the type of each element
 		GL_FALSE,          // take our values as-is
 		0,                 // no extra data between each position
 		0                  // offset of first element
 	);
-	glEnableVertexAttribArray(shaderProgram->attribute("vertexPosition"));
+	glEnableVertexAttribArray(_shader->getShaderProgram()->attribute("vertexPosition"));
 
 	//create vbo for normals
 	glGenBuffers(1, &VBO_normal);
@@ -120,28 +119,28 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * nVerts * 3, n, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(
-		shaderProgram->attribute("vertexNormal"), // attribute
+		_shader->getShaderProgram()->attribute("vertexNormal"), // attribute
 		3,                 // number of elements per vertex, here (x,y,z,1)
 		GL_FLOAT,          // the type of each element
 		GL_FALSE,          // take our values as-is
 		0,                 // no extra data between each position
 		0                  // offset of first element
 	);
-	glEnableVertexAttribArray(shaderProgram->attribute("vertexNormal"));
+	glEnableVertexAttribArray(_shader->getShaderProgram()->attribute("vertexNormal"));
 
 	// Create VBO for texture
 	glGenBuffers(1, &VBO_tex);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_tex);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * nVerts, tex, GL_STATIC_DRAW);
 	glVertexAttribPointer(
-		shaderProgram->attribute("VertexTexCoord"), // attribute
+		_shader->getShaderProgram()->attribute("VertexTexCoord"), // attribute
 		2,                 // number of elements per vertex, here (x,y,z,1)
 		GL_FLOAT,          // the type of each element
 		GL_FALSE,          // take our values as-is
 		0,                 // no extra data between each position
 		0                  // offset of first element
 	);
-	glEnableVertexAttribArray(shaderProgram->attribute("VertexTexCoord"));
+	glEnableVertexAttribArray(_shader->getShaderProgram()->attribute("VertexTexCoord"));
 
 	glGenBuffers(1, &IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
@@ -151,7 +150,7 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager)
 	
 }
 
-void Sphere::draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection) 
+void Sphere::Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection) 
 {
 	glm::mat4 mview = view * model;
 	glm::mat4 mvp = projection * view * model;
@@ -162,17 +161,17 @@ void Sphere::draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)
 	float uoffset = .05f;
 	glm::vec3 ucolor = glm::vec3(0, 0, 0);
 
-	shaderProgram->use();
+	_shader->getShaderProgram()->use();
 
-	if (_lightManager) _lightManager->Draw(model, view, projection);
-	if (_material) _material->draw(shaderProgram, view);
+	if (_lightManager) _lightManager->Draw(_shader, model, view, projection);
+	if (_material) _material->draw(_shader, view);
 
-	glUniformMatrix4fv(shaderProgram->uniform("ModelViewMatrix"), 1, GL_FALSE, glm::value_ptr(mview));
-	glUniformMatrix3fv(shaderProgram->uniform("normalMatrix"), 1, GL_FALSE, glm::value_ptr(normalMatrix));
-	glUniformMatrix4fv(shaderProgram->uniform("MVP"), 1, GL_FALSE, glm::value_ptr(mvp));
+	glUniformMatrix4fv(_shader->getShaderProgram()->uniform("ModelViewMatrix"), 1, GL_FALSE, glm::value_ptr(mview));
+	glUniformMatrix3fv(_shader->getShaderProgram()->uniform("normalMatrix"), 1, GL_FALSE, glm::value_ptr(normalMatrix));
+	glUniformMatrix4fv(_shader->getShaderProgram()->uniform("MVP"), 1, GL_FALSE, glm::value_ptr(mvp));
 
-	glUniformMatrix3fv(shaderProgram->uniform("uColor"), 1, GL_FALSE, glm::value_ptr(ucolor));
-	glUniform1fv(shaderProgram->uniform("u_offset"), 1, &uoffset);
+	glUniformMatrix3fv(_shader->getShaderProgram()->uniform("uColor"), 1, GL_FALSE, glm::value_ptr(ucolor));
+	glUniform1fv(_shader->getShaderProgram()->uniform("u_offset"), 1, &uoffset);
 
 	//glEnable(GL_TEXTURE_2D);
 	//glActiveTexture(GL_TEXTURE0);
@@ -187,7 +186,7 @@ void Sphere::draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)
 	glDrawElements(GL_TRIANGLES, size / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 	//glDrawElements(GL_TRIANGLES, elements, GL_UNSIGNED_SHORT, 0);
 
-	shaderProgram->disable();
+	_shader->getShaderProgram()->disable();
 }
 
 void Sphere::generateVerts(float * verts, float * norms, float * tex,

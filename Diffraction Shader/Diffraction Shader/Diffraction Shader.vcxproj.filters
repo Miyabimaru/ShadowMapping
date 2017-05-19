@@ -13,6 +13,8 @@
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Viewer.cpp" />
+    <ClCompile Include="IShader.cpp" />
+    <ClCompile Include="PhongShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CheckeredFloor.h" />
@@ -28,6 +30,8 @@
     <ClInclude Include="MyGlWindow.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Viewer.h" />
+    <ClInclude Include="IShader.h" />
+    <ClInclude Include="PhongShader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="floor.frag" />

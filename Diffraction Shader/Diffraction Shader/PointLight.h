@@ -17,7 +17,7 @@
 
 #include "IDrawable.h"
 
-class PointLight : public IDrawable
+class PointLight
 {
 private:
 	GLuint Id;
@@ -30,8 +30,8 @@ public:
 
 // Idrawable Functions
 public:
-	virtual void Initialise(ShaderProgram * shaderProgram);
-	virtual void Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection);
+	virtual void Initialise(IShader * shader);
+	virtual void Draw(IShader * shader, glm::mat4 model, glm::mat4 view, glm::mat4 projection);
 
 public:
 	PointLight(glm::vec4 p, glm::vec3 la, glm::vec3 ld, glm::vec3 ls, GLuint id);

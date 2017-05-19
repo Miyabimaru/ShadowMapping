@@ -109,7 +109,7 @@ void MyGlWindow::draw(void)
 	m_model.glTranslate(0, 1, 0);
 
 	if (_sphere1)
-		_sphere1->draw(m_model.getMatrix(), view, projection);
+		_sphere1->Draw(m_model.getMatrix(), view, projection);
 
 	if (modelList.size() > 0)
 	{
@@ -133,6 +133,7 @@ MyGlWindow::~MyGlWindow()
 		delete _sphere1;
 }
 
+#include "PhongShader.h"
 
 void MyGlWindow::initialize()
 {
@@ -151,7 +152,7 @@ void MyGlWindow::initialize()
 		glm::vec3(1, 0, 0)
 	);
 
-	_sphere1 = new Sphere(1.0, 60, 60, _lightManager, "simple_phong.vert", "simple_phong.frag");
+	_sphere1 = new Sphere(1.0, 60, 60, new PhongShader(), _lightManager, "simple_phong.vert", "simple_phong.frag");
 	m_floor = new checkeredFloor();
 }
 
