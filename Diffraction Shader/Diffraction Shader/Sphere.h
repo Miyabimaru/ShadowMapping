@@ -22,7 +22,7 @@ public:
 
 public:
 	Sphere(IShader * shader, LightManager * lightManager, std::string vertexShader, std::string fragmentShader);
-	Sphere(float rad, GLuint sl, GLuint st, IShader * shader, LightManager * lightManager, std::string vertexShader, std::string fragmentShader);
+	Sphere(float rad, GLuint sl, GLuint st, IShader * shader, LightManager * lightManager);
 	~Sphere();
 	
 	int getVertexArrayHandle();

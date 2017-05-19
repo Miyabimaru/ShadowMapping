@@ -152,7 +152,7 @@ void MyGlWindow::initialize()
 		glm::vec3(1, 0, 0)
 	);
 
-	_sphere1 = new Sphere(1.0, 60, 60, new PhongShader(), _lightManager, "simple_phong.vert", "simple_phong.frag");
+	_sphere1 = new Sphere(1.0, 60, 60, new PhongShader(), _lightManager);
 	m_floor = new checkeredFloor();
 }
 

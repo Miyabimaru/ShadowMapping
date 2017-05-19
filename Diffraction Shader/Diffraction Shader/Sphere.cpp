@@ -21,7 +21,7 @@ Sphere::~Sphere()
 
 
 //set rad = 1.0  sl, st = 60.
-Sphere::Sphere(float rad, GLuint sl, GLuint st, IShader * shader, LightManager * lightManager, std::string vertexShader, std::string fragmentShader) :
+Sphere::Sphere(float rad, GLuint sl, GLuint st, IShader * shader, LightManager * lightManager) :
 radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader)
 {
 	//glActiveTexture(GL_TEXTURE0);
@@ -71,17 +71,8 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader
 	// Generate the vertex data : this function fill all data into the arrays.
 	generateVerts(v, n, tex, el);  
 
-
-	//create vao, vbo, ibo here...
-	_shader->Initialise();
-
-	//create vao
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	//add attributes and uniform vars
-	_shader->getShaderProgram()->addAttribute("vertexPosition");
-	_shader->getShaderProgram()->addAttribute("vertexNormal");
+		//Shader
+	if (_shader) _shader->Initialise();
 
 		//light
 	if (_lightManager) _lightManager->Initialise(_shader);
@@ -89,15 +80,11 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader
 		//Material
 	if (_material) _material->setup(_shader);
 
-	_shader->getShaderProgram()->addUniform("ModelViewMatrix"); // View*Model : mat4
-	_shader->getShaderProgram()->addUniform("normalMatrix"); // Normal Matrix : mat3
-	_shader->getShaderProgram()->addUniform("MVP"); // Projection * View * Model : mat4
+	//create vao
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
 
-	_shader->getShaderProgram()->addUniform("u_offset");
-	_shader->getShaderProgram()->addUniform("uColor");
-
-	_shader->getShaderProgram()->addAttribute("VertexTexCoord");
-	_shader->getShaderProgram()->addUniform("Tex1");
+	//_shader->getShaderProgram()->addUniform("Tex1");
 
 	//create vbo for vertices
 	glGenBuffers(1, &VBO_position);
@@ -129,18 +116,18 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader
 	glEnableVertexAttribArray(_shader->getShaderProgram()->attribute("vertexNormal"));
 
 	// Create VBO for texture
-	glGenBuffers(1, &VBO_tex);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_tex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * nVerts, tex, GL_STATIC_DRAW);
-	glVertexAttribPointer(
-		_shader->getShaderProgram()->attribute("VertexTexCoord"), // attribute
-		2,                 // number of elements per vertex, here (x,y,z,1)
-		GL_FLOAT,          // the type of each element
-		GL_FALSE,          // take our values as-is
-		0,                 // no extra data between each position
-		0                  // offset of first element
-	);
-	glEnableVertexAttribArray(_shader->getShaderProgram()->attribute("VertexTexCoord"));
+	//glGenBuffers(1, &VBO_tex);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO_tex);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * nVerts, tex, GL_STATIC_DRAW);
+	//glVertexAttribPointer(
+	//	_shader->getShaderProgram()->attribute("VertexTexCoord"), // attribute
+	//	2,                 // number of elements per vertex, here (x,y,z,1)
+	//	GL_FLOAT,          // the type of each element
+	//	GL_FALSE,          // take our values as-is
+	//	0,                 // no extra data between each position
+	//	0                  // offset of first element
+	//);
+	//glEnableVertexAttribArray(_shader->getShaderProgram()->attribute("VertexTexCoord"));
 
 	glGenBuffers(1, &IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
@@ -152,26 +139,10 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader
 
 void Sphere::Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection) 
 {
-	glm::mat4 mview = view * model;
-	glm::mat4 mvp = projection * view * model;
-
-	glm::mat4 inverseModelView = glm::inverse(mview);
-	glm::mat3 normalMatrix = glm::mat3(glm::transpose(inverseModelView));
-
-	float uoffset = .05f;
-	glm::vec3 ucolor = glm::vec3(0, 0, 0);
-
-	_shader->getShaderProgram()->use();
+	if (_shader) _shader->Draw(model, view, projection);
 
 	if (_lightManager) _lightManager->Draw(_shader, model, view, projection);
 	if (_material) _material->draw(_shader, view);
-
-	glUniformMatrix4fv(_shader->getShaderProgram()->uniform("ModelViewMatrix"), 1, GL_FALSE, glm::value_ptr(mview));
-	glUniformMatrix3fv(_shader->getShaderProgram()->uniform("normalMatrix"), 1, GL_FALSE, glm::value_ptr(normalMatrix));
-	glUniformMatrix4fv(_shader->getShaderProgram()->uniform("MVP"), 1, GL_FALSE, glm::value_ptr(mvp));
-
-	glUniformMatrix3fv(_shader->getShaderProgram()->uniform("uColor"), 1, GL_FALSE, glm::value_ptr(ucolor));
-	glUniform1fv(_shader->getShaderProgram()->uniform("u_offset"), 1, &uoffset);
 
 	//glEnable(GL_TEXTURE_2D);
 	//glActiveTexture(GL_TEXTURE0);
@@ -190,7 +161,7 @@ void Sphere::Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)
 }
 
 void Sphere::generateVerts(float * verts, float * norms, float * tex,
-	unsigned int * el)
+	GLuint * el)
 {
 	// Generate positions and normals
 	GLfloat theta, phi;
