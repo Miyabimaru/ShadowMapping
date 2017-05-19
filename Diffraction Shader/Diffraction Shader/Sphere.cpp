@@ -155,7 +155,6 @@ void Sphere::Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)
 	int size;
 	glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
 	glDrawElements(GL_TRIANGLES, size / sizeof(GLuint), GL_UNSIGNED_INT, 0);
-	//glDrawElements(GL_TRIANGLES, elements, GL_UNSIGNED_SHORT, 0);
 
 	_shader->getShaderProgram()->disable();
 }
