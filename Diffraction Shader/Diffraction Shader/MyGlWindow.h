@@ -17,6 +17,8 @@
 #include <Fl/Fl.h>
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_File_Chooser.H>
+#include <FL/Fl_Text_Display.H>
+#include <FL/Fl_Output.H>
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -36,13 +38,16 @@
 
 class MyGlWindow : public Fl_Gl_Window {
 public:
-	void loadModel();
-	void deleteModel();
 	MyGlWindow(int x, int y, int w, int h);
 	~MyGlWindow();
 
 	Fl_Browser *browser;
 	std::vector<ModelLoader *> modelList;
+
+	//Callbacks
+	void loadModel();
+	void deleteModel();
+	void changeMaterial();
 
 private:
 	void draw();
