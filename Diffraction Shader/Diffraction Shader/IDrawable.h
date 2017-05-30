@@ -17,6 +17,7 @@ protected:
 	std::string _name;
 	IShader * _shader;
 	material * _material;
+	glm::vec3 _position;
 
 public:
 	virtual void Initialise(IShader * shader);
@@ -24,6 +25,9 @@ public:
 
 	material * const getMaterial(void);
 	virtual void setMaterial(material * mat);
+
+	glm::vec3 const getPosition(void);
+	virtual void setPosition(glm::vec3 pos);
 
 	std::string getName(void);
 };

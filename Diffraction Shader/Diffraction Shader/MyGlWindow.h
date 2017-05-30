@@ -55,6 +55,7 @@ public:
 	//Callbacks
 	void loadModel();
 	void deleteModel();
+	void changePosition();
 	void changeMaterial();
 
 	void spawnSimpleObject();
@@ -73,7 +74,12 @@ private:
 	Sphere * _sphere1;
 	Model m_model;
 
-	// material editor
+	// Position editor
+	Fl_Float_Input * posx;
+	Fl_Float_Input * posy;
+	Fl_Float_Input * posz;
+
+	// Material editor
 		// Ka
 	Fl_Float_Input * matkax;
 	Fl_Float_Input * matkay;

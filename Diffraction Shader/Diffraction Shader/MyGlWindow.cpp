@@ -31,6 +31,13 @@ static void DeleteModelCallback(Fl_Widget *w, void *f) {
 	((MyGlWindow *)f)->deleteModel();
 }
 
+static void ChangePositionCallback(Fl_Widget *w, void *f) {
+	Fl_Float_Input * widget = (Fl_Float_Input *)w;
+	std::cout << "POSITION VALUE: " << widget->value() << std::endl;
+	((MyGlWindow *)f)->callback();
+	((MyGlWindow *)f)->changePosition();
+}
+
 static void ChangeMaterialCallback(Fl_Widget *w, void *f) {
 	Fl_Float_Input * widget = (Fl_Float_Input *)w;
 	std::cout << "MAT VALUE: " << widget->value() << std::endl;
@@ -75,10 +82,22 @@ void MyGlWindow::loadModel()
 	this->redraw();
 }
 
+void MyGlWindow::changePosition()
+{
+	if (_selectedObject != nullptr)
+	{
+		_selectedObject->setPosition(
+			glm::vec3(atof(posx->value()), atof(posy->value()), atof(posz->value()))
+		);
+
+		this->redraw();
+	}
+	else
+		updateSelected(_selectedObject);
+}
+
 void MyGlWindow::changeMaterial()
 {
-	std::cout << "(MyGlWindow) Change Material Unimplemented" << std::endl;
-
 	if (_selectedObject != nullptr)
 	{
 		_selectedObject->setMaterial(new material(
@@ -109,6 +128,11 @@ void MyGlWindow::updateSelected(IDrawable * drawable)
 
 	if (drawable != nullptr)
 	{
+		// Update position editor
+		posx->value(std::to_string(_selectedObject->getPosition().x).c_str());
+		posy->value(std::to_string(_selectedObject->getPosition().y).c_str());
+		posz->value(std::to_string(_selectedObject->getPosition().z).c_str());
+
 		// Update material editor
 		matkax->value(std::to_string(_selectedObject->getMaterial()->getKa().x).c_str());
 		matkay->value(std::to_string(_selectedObject->getMaterial()->getKa().y).c_str());
@@ -124,6 +148,11 @@ void MyGlWindow::updateSelected(IDrawable * drawable)
 	}
 	else
 	{
+		// Update position editor
+		posx->value("");
+		posy->value("");
+		posz->value("");
+
 		// Update material editor
 		matkax->value("");
 		matkay->value("");
@@ -164,31 +193,44 @@ MyGlWindow::MyGlWindow(int x, int y, int w, int h)
 	buttonAddChoice->callback(AddSimpleObjectCallback, (void *)this);
 
 	/*
+	** Position Editor
+	*/
+	// Ka
+	Fl_Output *posl = new Fl_Output(w + 80, h / 2 + 75, 0, 0, "Pos:");
+	posx = new Fl_Float_Input(w + 100, h / 2 + 60, 50, 30, "");
+	posx->callback(ChangePositionCallback, (void *)this);
+	posy = new Fl_Float_Input(w + 160, h / 2 + 60, 50, 30, "");
+	posy->callback(ChangePositionCallback, (void *)this);
+	posz = new Fl_Float_Input(w + 220, h / 2 + 60, 50, 30, "");
+	posz->callback(ChangePositionCallback, (void *)this);
+	/* !Position Editor */
+	
+	/*
 	** Material Editor
 	*/
 	// Ka
-	Fl_Output *matkal = new Fl_Output(w + 80, h / 2 + 75, 0, 0, "Ka:");
-	matkax = new Fl_Float_Input(w + 100, h / 2 + 60, 50, 30, "");
+	Fl_Output *matkal = new Fl_Output(w + 80, h / 2 + 115, 0, 0, "Ka:");
+	matkax = new Fl_Float_Input(w + 100, h / 2 + 100, 50, 30, "");
 	matkax->callback(ChangeMaterialCallback, (void *)this);
-	matkay = new Fl_Float_Input(w + 160, h / 2 + 60, 50, 30, "");
+	matkay = new Fl_Float_Input(w + 160, h / 2 + 100, 50, 30, "");
 	matkay->callback(ChangeMaterialCallback, (void *)this);
-	matkaz = new Fl_Float_Input(w + 220, h / 2 + 60, 50, 30, "");
+	matkaz = new Fl_Float_Input(w + 220, h / 2 + 100, 50, 30, "");
 	matkaz->callback(ChangeMaterialCallback, (void *)this);
 	// Kd
-	Fl_Output *matkdl = new Fl_Output(w + 80, h / 2 + 115, 0, 0, "Kd:");
-	matkdx = new Fl_Float_Input(w + 100, h / 2 + 100, 50, 30, "");
+	Fl_Output *matkdl = new Fl_Output(w + 80, h / 2 + 155, 0, 0, "Kd:");
+	matkdx = new Fl_Float_Input(w + 100, h / 2 + 140, 50, 30, "");
 	matkdx->callback(ChangeMaterialCallback, (void *)this);
-	matkdy = new Fl_Float_Input(w + 160, h / 2 + 100, 50, 30, "");
+	matkdy = new Fl_Float_Input(w + 160, h / 2 + 140, 50, 30, "");
 	matkdy->callback(ChangeMaterialCallback, (void *)this);
-	matkdz = new Fl_Float_Input(w + 220, h / 2 + 100, 50, 30, "");
+	matkdz = new Fl_Float_Input(w + 220, h / 2 + 140, 50, 30, "");
 	matkdz->callback(ChangeMaterialCallback, (void *)this);
 	// Ks
-	Fl_Output *matksl = new Fl_Output(w + 80, h / 2 + 155, 0, 0, "Ks:");
-	matksx = new Fl_Float_Input(w + 100, h / 2 + 140, 50, 30, "");
+	Fl_Output *matksl = new Fl_Output(w + 80, h / 2 + 195, 0, 0, "Ks:");
+	matksx = new Fl_Float_Input(w + 100, h / 2 + 180, 50, 30, "");
 	matksx->callback(ChangeMaterialCallback, (void *)this);
-	matksy = new Fl_Float_Input(w + 160, h / 2 + 140, 50, 30, "");
+	matksy = new Fl_Float_Input(w + 160, h / 2 + 180, 50, 30, "");
 	matksy->callback(ChangeMaterialCallback, (void *)this);
-	matksz = new Fl_Float_Input(w + 220, h / 2 + 140, 50, 30, "");
+	matksz = new Fl_Float_Input(w + 220, h / 2 + 180, 50, 30, "");
 	matksz->callback(ChangeMaterialCallback, (void *)this);
 	/* !Material Editor */
 
@@ -244,8 +286,8 @@ void MyGlWindow::draw(void)
 	if (m_floor)
 		m_floor->draw(m_model.getMatrix(), view, projection);
 
-	m_model.glPushMatrix();
-	m_model.glTranslate(0, 1, 0);
+	//m_model.glPushMatrix();
+	//m_model.glTranslate(0, 1, 0);
 
 	//if (_sphere1)
 	//	_sphere1->Draw(m_model.getMatrix(), view, projection);
@@ -254,12 +296,15 @@ void MyGlWindow::draw(void)
 	{
 		for each (IDrawable *model in _objectList)
 		{
-			m_model.glTranslate(2, 0, 0);
+			//m_model.glTranslate(2, 0, 0);
+			m_model.glPushMatrix();
+			m_model.glTranslate(model->getPosition().x, model->getPosition().y, model->getPosition().z);
 			model->Draw(m_model.getMatrix(), view, projection);
+			m_model.glPopMatrix();
 		}
 	}
 
-	m_model.glPopMatrix();
+	//m_model.glPopMatrix();
 }
 
 MyGlWindow::~MyGlWindow()
