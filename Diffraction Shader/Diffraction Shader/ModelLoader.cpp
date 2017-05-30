@@ -7,6 +7,7 @@
 void ModelLoader::loadModel(std::string path, IShader * shader)
 {
 	IDrawable::Initialise(shader);
+	this->setMaterial(new material(glm::vec3(), glm::vec3(), glm::vec3(), 180.0f));
 
 	Assimp::Importer import;
 	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate |
