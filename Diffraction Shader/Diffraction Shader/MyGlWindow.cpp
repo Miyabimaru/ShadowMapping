@@ -78,14 +78,17 @@ void MyGlWindow::deleteModel()
 void MyGlWindow::loadModel()
 {
 	char *pathFile = fl_file_chooser("Select a file", "*.obj", 0);
-	std::string path = std::string(pathFile);
-	std::string fileName = path.substr(path.find_last_of('/') + 1, path.find_last_of('.') - path.find_last_of('/') - 1);
-	const char *c_fileName = fileName.c_str();
-	browser->add(c_fileName);
-	ModelLoader *m_3DModel = new ModelLoader(pathFile, c_fileName);
-	_objectList.push_back(m_3DModel);
-	//this->initialize();
-	this->redraw();
+	if (pathFile != nullptr)
+	{
+		std::string path = std::string(pathFile);
+		std::string fileName = path.substr(path.find_last_of('/') + 1, path.find_last_of('.') - path.find_last_of('/') - 1);
+		const char *c_fileName = fileName.c_str();
+		browser->add(c_fileName);
+		ModelLoader *m_3DModel = new ModelLoader(pathFile, c_fileName);
+		_objectList.push_back(m_3DModel);
+		//this->initialize();
+		this->redraw();
+	}
 }
 
 void MyGlWindow::changePosition()
@@ -193,7 +196,7 @@ MyGlWindow::MyGlWindow(int x, int y, int w, int h)
 	Fl_Button *buttonAddModel = new Fl_Button(w + 20, 10, 115, 30, "Load a model");
 	buttonAddModel->callback(AddModelCallback, (void *)this);
 
-	Fl_Button *buttonDeleteModel = new Fl_Button(w + 140, 10, 125, 30, "Delete a model");
+	Fl_Button *buttonDeleteModel = new Fl_Button(w + 140, 10, 125, 30, "Delete object");
 	buttonDeleteModel->callback(DeleteModelCallback, (void *)this);
 
 	choiceSimpleObjectSpawner = new Fl_Choice(w + 115, 50, 125, 20, "Simple object");
@@ -352,8 +355,12 @@ void MyGlWindow::initialize()
 
 
 int m_pressedMouseButton;
+int m_pressedLeftButton;
+int m_pressedRightButton;
 int m_lastMouseX;
 int m_lastMouseY;
+
+int m_pressedKeyButton;
 
 int MyGlWindow::handle(int e)
 //==========================================================================
@@ -362,11 +369,28 @@ int MyGlWindow::handle(int e)
 	case FL_SHOW:		// you must handle this, or not be seen!
 		show();
 		return 1;
+	case FL_KEYDOWN:
+		std::cout << "KEYBOARD" << std::endl;
+		m_pressedKeyButton = Fl::event_key();
+		if (m_pressedKeyButton == FL_Up) {
+			m_viewer->zoom(100);
+			return 1;
+		}
+		return 0;
 	case FL_PUSH:
 	{
 
 					m_pressedMouseButton = Fl::event_button();
-
+					if (m_pressedMouseButton == 1)
+						m_pressedLeftButton = 1;
+					if (m_pressedMouseButton == 3)
+						m_pressedRightButton = 1;
+					if (m_pressedMouseButton == 2)
+					{
+						m_pressedLeftButton = 1;
+						m_pressedRightButton = 1;
+					}
+					m_pressedMouseButton = -1;
 					//	  m_viewer->setAspectRatio( static_cast<double>(this->w()) / static_cast<double>(this->h()) );
 
 					m_lastMouseX = Fl::event_x();
@@ -375,6 +399,16 @@ int MyGlWindow::handle(int e)
 		damage(1);
 		return 1;
 	case FL_RELEASE:
+		m_pressedMouseButton = Fl::event_button();
+		if (m_pressedMouseButton == 1)
+			m_pressedLeftButton = 0;
+		if (m_pressedMouseButton == 3)
+			m_pressedRightButton = 0;
+		if (m_pressedMouseButton == 2)
+		{
+			m_pressedLeftButton = 0;
+			m_pressedRightButton = 0;
+		}
 		m_pressedMouseButton = -1;
 		damage(1);
 		return 1;
@@ -384,13 +418,13 @@ int MyGlWindow::handle(int e)
 					  double fractionChangeX = static_cast<double>(Fl::event_x() - m_lastMouseX) / static_cast<double>(this->w());
 					  double fractionChangeY = static_cast<double>(m_lastMouseY - Fl::event_y()) / static_cast<double>(this->h());
 
-					  if (m_pressedMouseButton == 1) {
+					  if (m_pressedLeftButton == 1 && m_pressedRightButton == 0) {
 						  m_viewer->rotate(fractionChangeX, fractionChangeY);
 					  }
-					  else if (m_pressedMouseButton == 2) {
+					  else if (m_pressedLeftButton == 1 && m_pressedRightButton == 1) {
 						  m_viewer->zoom(fractionChangeY);
 					  }
-					  else if (m_pressedMouseButton == 3) {
+					  else if (m_pressedLeftButton == 0 && m_pressedRightButton == 1) {
 						  m_viewer->translate(-fractionChangeX, -fractionChangeY, (Fl::event_key(FL_Shift_L) == 0) || (Fl::event_key(FL_Shift_R) == 0));
 					  }
 					  else {
@@ -403,9 +437,6 @@ int MyGlWindow::handle(int e)
 	}
 
 		return 1;
-
-	case FL_KEYBOARD:
-		return 0;
 
 	default:
 		return 0;
