@@ -16,6 +16,8 @@ static void DeleteModelCallback(Fl_Widget *w, void *f) {
 }
 
 static void ChangeMaterialCallback(Fl_Widget *w, void *f) {
+	Fl_Float_Input * widget = (Fl_Float_Input *)w;
+	std::cout << "MAT VALUE: " << widget->value() << std::endl;
 	((MyGlWindow *)f)->callback();
 	((MyGlWindow *)f)->changeMaterial();
 }
@@ -68,27 +70,27 @@ MyGlWindow::MyGlWindow(int x, int y, int w, int h)
 	*/
 	// Ka
 	Fl_Output *matkal = new Fl_Output(w + 80, h / 2 + 75, 0, 0, "Ka:");
-	Fl_Input *matkax = new Fl_Input(w + 100, h / 2 + 60, 50, 30, "");
+	Fl_Float_Input *matkax = new Fl_Float_Input(w + 100, h / 2 + 60, 50, 30, "");
 	matkax->callback(ChangeMaterialCallback, (void *)this);
-	Fl_Input *matkay = new Fl_Input(w + 160, h / 2 + 60, 50, 30, "");
+	Fl_Float_Input *matkay = new Fl_Float_Input(w + 160, h / 2 + 60, 50, 30, "");
 	matkay->callback(ChangeMaterialCallback, (void *)this);
-	Fl_Input *matkaz = new Fl_Input(w + 220, h / 2 + 60, 50, 30, "");
+	Fl_Float_Input *matkaz = new Fl_Float_Input(w + 220, h / 2 + 60, 50, 30, "");
 	matkaz->callback(ChangeMaterialCallback, (void *)this);
 	// Kd
 	Fl_Output *matkdl = new Fl_Output(w + 80, h / 2 + 115, 0, 0, "Kd:");
-	Fl_Input *matkdx = new Fl_Input(w + 100, h / 2 + 100, 50, 30, "");
+	Fl_Float_Input *matkdx = new Fl_Float_Input(w + 100, h / 2 + 100, 50, 30, "");
 	matkdx->callback(ChangeMaterialCallback, (void *)this);
-	Fl_Input *matkdy = new Fl_Input(w + 160, h / 2 + 100, 50, 30, "");
+	Fl_Float_Input *matkdy = new Fl_Float_Input(w + 160, h / 2 + 100, 50, 30, "");
 	matkdy->callback(ChangeMaterialCallback, (void *)this);
-	Fl_Input *matkdz = new Fl_Input(w + 220, h / 2 + 100, 50, 30, "");
+	Fl_Float_Input *matkdz = new Fl_Float_Input(w + 220, h / 2 + 100, 50, 30, "");
 	matkdz->callback(ChangeMaterialCallback, (void *)this);
 	// Ks
 	Fl_Output *matksl = new Fl_Output(w + 80, h / 2 + 155, 0, 0, "Ks:");
-	Fl_Input *matksx = new Fl_Input(w + 100, h / 2 + 140, 50, 30, "");
+	Fl_Float_Input *matksx = new Fl_Float_Input(w + 100, h / 2 + 140, 50, 30, "");
 	matksx->callback(ChangeMaterialCallback, (void *)this);
-	Fl_Input *matksy = new Fl_Input(w + 160, h / 2 + 140, 50, 30, "");
+	Fl_Float_Input *matksy = new Fl_Float_Input(w + 160, h / 2 + 140, 50, 30, "");
 	matksy->callback(ChangeMaterialCallback, (void *)this);
-	Fl_Input *matksz = new Fl_Input(w + 220, h / 2 + 140, 50, 30, "");
+	Fl_Float_Input *matksz = new Fl_Float_Input(w + 220, h / 2 + 140, 50, 30, "");
 	matksz->callback(ChangeMaterialCallback, (void *)this);
 	/* !Material Editor */
 

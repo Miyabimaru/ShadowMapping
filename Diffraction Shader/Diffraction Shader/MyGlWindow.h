@@ -19,6 +19,7 @@
 #include <FL/Fl_File_Chooser.H>
 #include <FL/Fl_Text_Display.H>
 #include <FL/Fl_Output.H>
+#include <FL/Fl_Float_Input.H>
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -31,6 +32,7 @@
 
 #include "Sphere.h"
 
+#include "material.h"
 #include "LightManager.h"
 
 #pragma warning(pop)
