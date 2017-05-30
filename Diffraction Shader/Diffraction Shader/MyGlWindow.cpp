@@ -22,14 +22,26 @@ static void ChangeMaterialCallback(Fl_Widget *w, void *f) {
 	((MyGlWindow *)f)->changeMaterial();
 }
 
+static void ChangeSelectionCallback(Fl_Widget *w, void *f) {
+	Fl_Browser * br = (Fl_Browser *)w;
+	MyGlWindow * win = (MyGlWindow *)f;
+	int index = br->value();
+	std::cout << "CALLBACK BR " << index << std::endl;
+	if (index > 0)
+		win->updateSelected(win->_objectList[index - 1]);
+	else
+		win->updateSelected(nullptr);
+}
+
 void MyGlWindow::deleteModel()
 {
 	int index = browser->value();
 	if (index > 0)
 	{
-		modelList.erase(modelList.begin() + index - 1);
+		_objectList.erase(_objectList.begin() + index - 1);
 		browser->remove(index);
-		this->initialize();
+		this->updateSelected(nullptr);
+		//this->initialize();
 		this->redraw();
 	}
 }
@@ -42,22 +54,74 @@ void MyGlWindow::loadModel()
 	const char *c_fileName = fileName.c_str();
 	browser->add(c_fileName);
 	ModelLoader *m_3DModel = new ModelLoader(pathFile, c_fileName);
-	modelList.push_back(m_3DModel);
-	this->initialize();
+	_objectList.push_back(m_3DModel);
+	//this->initialize();
 	this->redraw();
 }
 
 void MyGlWindow::changeMaterial()
 {
 	std::cout << "(MyGlWindow) Change Material Unimplemented" << std::endl;
+
+	if (_selectedObject != nullptr)
+	{
+		_selectedObject->setMaterial(new material(
+			glm::vec3(atof(matkax->value()), atof(matkay->value()), atof(matkaz->value())),
+			glm::vec3(atof(matkdx->value()), atof(matkdy->value()), atof(matkdz->value())),
+			glm::vec3(atof(matksx->value()), atof(matksy->value()), atof(matksz->value())),
+			180.0f));
+
+		this->redraw();
+	}
+	else
+		updateSelected(_selectedObject);
+}
+
+void MyGlWindow::updateSelected(IDrawable * drawable)
+{
+	_selectedObject = drawable;
+
+	if (drawable != nullptr)
+	{
+		// Update material editor
+		matkax->value(std::to_string(_selectedObject->getMaterial()->getKa().x).c_str());
+		matkay->value(std::to_string(_selectedObject->getMaterial()->getKa().y).c_str());
+		matkaz->value(std::to_string(_selectedObject->getMaterial()->getKa().z).c_str());
+
+		matkdx->value(std::to_string(_selectedObject->getMaterial()->getKd().x).c_str());
+		matkdy->value(std::to_string(_selectedObject->getMaterial()->getKd().y).c_str());
+		matkdz->value(std::to_string(_selectedObject->getMaterial()->getKd().z).c_str());
+
+		matksx->value(std::to_string(_selectedObject->getMaterial()->getKs().x).c_str());
+		matksy->value(std::to_string(_selectedObject->getMaterial()->getKs().y).c_str());
+		matksz->value(std::to_string(_selectedObject->getMaterial()->getKs().z).c_str());
+	}
+	else
+	{
+		// Update material editor
+		matkax->value("");
+		matkay->value("");
+		matkaz->value("");
+
+		matkdx->value("");
+		matkdy->value("");
+		matkdz->value("");
+
+		matksx->value("");
+		matksy->value("");
+		matksz->value("");
+	}
 }
 
 MyGlWindow::MyGlWindow(int x, int y, int w, int h)
 : Fl_Gl_Window(x, y, w, h)
 //==========================================================================
 {	
+	_selectedObject = nullptr;
+
 	browser = new Fl_Browser(w + 20, 50, 250, h/2);
 	browser->type(FL_HOLD_BROWSER);
+	browser->callback(ChangeSelectionCallback, (void *)this);
 
 	Fl_Button *buttonAddModel = new Fl_Button(w + 20, 10, 115, 30, "Load a model");
 	buttonAddModel->callback(AddModelCallback, (void *)this);
@@ -70,27 +134,27 @@ MyGlWindow::MyGlWindow(int x, int y, int w, int h)
 	*/
 	// Ka
 	Fl_Output *matkal = new Fl_Output(w + 80, h / 2 + 75, 0, 0, "Ka:");
-	Fl_Float_Input *matkax = new Fl_Float_Input(w + 100, h / 2 + 60, 50, 30, "");
+	matkax = new Fl_Float_Input(w + 100, h / 2 + 60, 50, 30, "");
 	matkax->callback(ChangeMaterialCallback, (void *)this);
-	Fl_Float_Input *matkay = new Fl_Float_Input(w + 160, h / 2 + 60, 50, 30, "");
+	matkay = new Fl_Float_Input(w + 160, h / 2 + 60, 50, 30, "");
 	matkay->callback(ChangeMaterialCallback, (void *)this);
-	Fl_Float_Input *matkaz = new Fl_Float_Input(w + 220, h / 2 + 60, 50, 30, "");
+	matkaz = new Fl_Float_Input(w + 220, h / 2 + 60, 50, 30, "");
 	matkaz->callback(ChangeMaterialCallback, (void *)this);
 	// Kd
 	Fl_Output *matkdl = new Fl_Output(w + 80, h / 2 + 115, 0, 0, "Kd:");
-	Fl_Float_Input *matkdx = new Fl_Float_Input(w + 100, h / 2 + 100, 50, 30, "");
+	matkdx = new Fl_Float_Input(w + 100, h / 2 + 100, 50, 30, "");
 	matkdx->callback(ChangeMaterialCallback, (void *)this);
-	Fl_Float_Input *matkdy = new Fl_Float_Input(w + 160, h / 2 + 100, 50, 30, "");
+	matkdy = new Fl_Float_Input(w + 160, h / 2 + 100, 50, 30, "");
 	matkdy->callback(ChangeMaterialCallback, (void *)this);
-	Fl_Float_Input *matkdz = new Fl_Float_Input(w + 220, h / 2 + 100, 50, 30, "");
+	matkdz = new Fl_Float_Input(w + 220, h / 2 + 100, 50, 30, "");
 	matkdz->callback(ChangeMaterialCallback, (void *)this);
 	// Ks
 	Fl_Output *matksl = new Fl_Output(w + 80, h / 2 + 155, 0, 0, "Ks:");
-	Fl_Float_Input *matksx = new Fl_Float_Input(w + 100, h / 2 + 140, 50, 30, "");
+	matksx = new Fl_Float_Input(w + 100, h / 2 + 140, 50, 30, "");
 	matksx->callback(ChangeMaterialCallback, (void *)this);
-	Fl_Float_Input *matksy = new Fl_Float_Input(w + 160, h / 2 + 140, 50, 30, "");
+	matksy = new Fl_Float_Input(w + 160, h / 2 + 140, 50, 30, "");
 	matksy->callback(ChangeMaterialCallback, (void *)this);
-	Fl_Float_Input *matksz = new Fl_Float_Input(w + 220, h / 2 + 140, 50, 30, "");
+	matksz = new Fl_Float_Input(w + 220, h / 2 + 140, 50, 30, "");
 	matksz->callback(ChangeMaterialCallback, (void *)this);
 	/* !Material Editor */
 
@@ -149,15 +213,15 @@ void MyGlWindow::draw(void)
 	m_model.glPushMatrix();
 	m_model.glTranslate(0, 1, 0);
 
-	if (_sphere1)
-		_sphere1->Draw(m_model.getMatrix(), view, projection);
+	//if (_sphere1)
+	//	_sphere1->Draw(m_model.getMatrix(), view, projection);
 
-	if (modelList.size() > 0)
+	if (_objectList.size() > 0)
 	{
-		for each (ModelLoader *model in modelList)
+		for each (IDrawable *model in _objectList)
 		{
 			m_model.glTranslate(2, 0, 0);
-			model->draw(m_model.getMatrix(), view, projection);
+			model->Draw(m_model.getMatrix(), view, projection);
 		}
 	}
 
@@ -194,6 +258,8 @@ void MyGlWindow::initialize()
 	);
 
 	_sphere1 = new Sphere(1.0, 60, 60, new PhongShader(), _lightManager);
+	_objectList.push_back(_sphere1);
+	browser->add("Sphere");
 	m_floor = new checkeredFloor();
 }
 

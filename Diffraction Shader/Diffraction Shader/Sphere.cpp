@@ -48,11 +48,11 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader
 		glm::vec3(.9, .9, .9),
 		180.0f);*/
 
-	_material = new material(
+	this->setMaterial(new material(
 		glm::vec3(.1, .1, .1),
 		glm::vec3(.9, .9, .9),
 		glm::vec3(.9, .9, .9),
-		180.0f);
+		180.0f));
 
 	nVerts = (slices + 1) * (stacks + 1);  //the number of vertices
 	elements = (slices * 2 * (stacks - 1)) * 3; 

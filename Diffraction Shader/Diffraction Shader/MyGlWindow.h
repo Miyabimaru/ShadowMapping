@@ -32,6 +32,7 @@
 
 #include "Sphere.h"
 
+#include "IDrawable.h"
 #include "material.h"
 #include "LightManager.h"
 
@@ -44,12 +45,16 @@ public:
 	~MyGlWindow();
 
 	Fl_Browser *browser;
-	std::vector<ModelLoader *> modelList;
+	std::vector<IDrawable *> _objectList;
+
+	IDrawable * _selectedObject;
 
 	//Callbacks
 	void loadModel();
 	void deleteModel();
 	void changeMaterial();
+
+	void updateSelected(IDrawable * drawable);
 
 private:
 	void draw();
@@ -63,4 +68,18 @@ private:
 	checkeredFloor * m_floor;
 	Sphere * _sphere1;
 	Model m_model;
+
+	// material editor
+		// Ka
+	Fl_Float_Input * matkax;
+	Fl_Float_Input * matkay;
+	Fl_Float_Input * matkaz;
+		// Kd
+	Fl_Float_Input * matkdx;
+	Fl_Float_Input * matkdy;
+	Fl_Float_Input * matkdz;
+		// Ks
+	Fl_Float_Input * matksx;
+	Fl_Float_Input * matksy;
+	Fl_Float_Input * matksz;
 };

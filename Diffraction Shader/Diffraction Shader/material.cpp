@@ -27,3 +27,18 @@ void material::draw(IShader * shader, glm::mat4 & view)
 	glUniform3fv(shader->getShaderProgram()->uniform("Material.Ks"), 1, glm::value_ptr(Ks));
 	glUniform1fv(shader->getShaderProgram()->uniform("Material.Shiness"), 1, &Shiness);
 }
+
+glm::vec3 material::getKa(void)
+{
+	return Ka;
+}
+
+glm::vec3 material::getKd(void)
+{
+	return Kd;
+}
+
+glm::vec3 material::getKs(void)
+{
+	return Ks;
+}

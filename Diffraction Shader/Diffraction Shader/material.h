@@ -30,6 +30,10 @@ public:
 
 	void setup(IShader * shader);
 	void draw(IShader * shader, glm::mat4 & view);
+
+	glm::vec3 getKa(void);
+	glm::vec3 getKd(void);
+	glm::vec3 getKs(void);
 };
 
 #endif /* !_MATERIAL_H_ */

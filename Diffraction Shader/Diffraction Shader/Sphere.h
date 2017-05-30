@@ -32,7 +32,6 @@ public:
 
 	IShader * _shader;
 	LightManager * _lightManager;
-	material * _material;
 
 private:
 	GLuint nVerts, elements;

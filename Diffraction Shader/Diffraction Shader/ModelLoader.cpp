@@ -4,8 +4,10 @@
 #include <assimp/postprocess.h>
 #include <SOIL\SOIL.h>
 
-void ModelLoader::loadModel(std::string path)
+void ModelLoader::loadModel(std::string path, IShader * shader)
 {
+	IDrawable::Initialise(shader);
+
 	Assimp::Importer import;
 	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate |
 		aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_OptimizeMeshes | aiProcess_CalcTangentSpace);
@@ -114,6 +116,12 @@ std::vector<Texture> ModelLoader::loadMaterialTextures(aiMaterial* mat, aiTextur
 		textures.push_back(texture);
 	}
 	return textures;
+}
+
+void ModelLoader::Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)
+{
+	for (GLuint i = 0; i < this->meshes.size(); i++)
+		this->meshes[i].draw(model, view, projection);
 }
 
 void ModelLoader::draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)

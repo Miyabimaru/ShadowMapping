@@ -26,7 +26,6 @@ public:
 	LightManager();
 	~LightManager();
 
-// Idrawable Functions
 public:
 	virtual void Initialise(IShader * shader);
 	virtual void Draw(IShader * shader, glm::mat4 model, glm::mat4 view, glm::mat4 projection);
