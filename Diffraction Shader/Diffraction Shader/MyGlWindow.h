@@ -20,6 +20,7 @@
 #include <FL/Fl_Text_Display.H>
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Float_Input.H>
+#include <FL/Fl_Choice.H>
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -45,6 +46,8 @@ public:
 	~MyGlWindow();
 
 	Fl_Browser *browser;
+	Fl_Choice *choiceSimpleObjectSpawner;
+	std::string currentSimpleObjectName;
 	std::vector<IDrawable *> _objectList;
 
 	IDrawable * _selectedObject;
@@ -54,6 +57,7 @@ public:
 	void deleteModel();
 	void changeMaterial();
 
+	void spawnSimpleObject();
 	void updateSelected(IDrawable * drawable);
 
 private:

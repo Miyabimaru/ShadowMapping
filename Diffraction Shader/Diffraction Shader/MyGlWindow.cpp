@@ -5,6 +5,22 @@ static double DEFAULT_VIEW_POINT[3] = { 5, 5, 5 };
 static double DEFAULT_VIEW_CENTER[3] = { 0, 0, 0 };
 static double DEFAULT_UP_VECTOR[3] = { 0, 1, 0 };
 
+static void changeSimpleObjectSelection(Fl_Widget *w, void *f) {
+	((MyGlWindow *)f)->callback();
+
+	Fl_Choice * choice = (Fl_Choice *)w;
+	MyGlWindow * win = (MyGlWindow *)f;
+
+	win->currentSimpleObjectName = choice->menu()[choice->value()].label();
+
+	std::cout << "current object selected: " << win->currentSimpleObjectName << std::endl;
+}
+
+static void AddSimpleObjectCallback(Fl_Widget *w, void *f) {
+	((MyGlWindow *)f)->callback();
+	((MyGlWindow *)f)->spawnSimpleObject();
+}
+
 static void AddModelCallback(Fl_Widget *w, void *f) {
 	((MyGlWindow *)f)->callback();
 	((MyGlWindow *)f)->loadModel();
@@ -77,6 +93,16 @@ void MyGlWindow::changeMaterial()
 		updateSelected(_selectedObject);
 }
 
+void MyGlWindow::spawnSimpleObject()
+{
+	if (currentSimpleObjectName == "Sphere")
+	{
+		_objectList.push_back(new Sphere(1.0, 60, 60, new PhongShader(), _lightManager));
+		browser->add("Sphere");
+	}
+	this->redraw();
+}
+
 void MyGlWindow::updateSelected(IDrawable * drawable)
 {
 	_selectedObject = drawable;
@@ -118,8 +144,9 @@ MyGlWindow::MyGlWindow(int x, int y, int w, int h)
 //==========================================================================
 {	
 	_selectedObject = nullptr;
+	currentSimpleObjectName = "";
 
-	browser = new Fl_Browser(w + 20, 50, 250, h/2);
+	browser = new Fl_Browser(w + 20, 80, 250, h/2 - 30);
 	browser->type(FL_HOLD_BROWSER);
 	browser->callback(ChangeSelectionCallback, (void *)this);
 
@@ -128,6 +155,13 @@ MyGlWindow::MyGlWindow(int x, int y, int w, int h)
 
 	Fl_Button *buttonDeleteModel = new Fl_Button(w + 140, 10, 125, 30, "Delete a model");
 	buttonDeleteModel->callback(DeleteModelCallback, (void *)this);
+
+	choiceSimpleObjectSpawner = new Fl_Choice(w + 115, 50, 125, 20, "Simple object");
+	choiceSimpleObjectSpawner->add("Sphere");
+	choiceSimpleObjectSpawner->callback(changeSimpleObjectSelection, (void *)this);
+
+	Fl_Button *buttonAddChoice = new Fl_Button(w + 250, 50, 15, 20, "+");
+	buttonAddChoice->callback(AddSimpleObjectCallback, (void *)this);
 
 	/*
 	** Material Editor
