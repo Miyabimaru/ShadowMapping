@@ -5,6 +5,12 @@ static double DEFAULT_VIEW_POINT[3] = { 5, 5, 5 };
 static double DEFAULT_VIEW_CENTER[3] = { 0, 0, 0 };
 static double DEFAULT_UP_VECTOR[3] = { 0, 1, 0 };
 
+static std::string noTrailing(std::string str) {
+	str.erase(str.find_last_not_of('0') + 1, std::string::npos);
+	str.erase(str.find_last_not_of('.') + 1, std::string::npos);
+	return str;
+}
+
 static void changeSimpleObjectSelection(Fl_Widget *w, void *f) {
 	((MyGlWindow *)f)->callback();
 
@@ -119,6 +125,11 @@ void MyGlWindow::spawnSimpleObject()
 		_objectList.push_back(new Sphere(1.0, 60, 60, new PhongShader(), _lightManager));
 		browser->add("Sphere");
 	}
+	else if (currentSimpleObjectName == "Floor")
+	{
+		_objectList.push_back(new checkeredFloor());
+		browser->add("Floor");
+	}
 	this->redraw();
 }
 
@@ -129,22 +140,22 @@ void MyGlWindow::updateSelected(IDrawable * drawable)
 	if (drawable != nullptr)
 	{
 		// Update position editor
-		posx->value(std::to_string(_selectedObject->getPosition().x).c_str());
-		posy->value(std::to_string(_selectedObject->getPosition().y).c_str());
-		posz->value(std::to_string(_selectedObject->getPosition().z).c_str());
+		posx->value(noTrailing(std::to_string(_selectedObject->getPosition().x)).c_str());
+		posy->value(noTrailing(std::to_string(_selectedObject->getPosition().y)).c_str());
+		posz->value(noTrailing(std::to_string(_selectedObject->getPosition().z)).c_str());
 
 		// Update material editor
-		matkax->value(std::to_string(_selectedObject->getMaterial()->getKa().x).c_str());
-		matkay->value(std::to_string(_selectedObject->getMaterial()->getKa().y).c_str());
-		matkaz->value(std::to_string(_selectedObject->getMaterial()->getKa().z).c_str());
+		matkax->value(noTrailing(std::to_string(_selectedObject->getMaterial()->getKa().x)).c_str());
+		matkay->value(noTrailing(std::to_string(_selectedObject->getMaterial()->getKa().y)).c_str());
+		matkaz->value(noTrailing(std::to_string(_selectedObject->getMaterial()->getKa().z)).c_str());
 
-		matkdx->value(std::to_string(_selectedObject->getMaterial()->getKd().x).c_str());
-		matkdy->value(std::to_string(_selectedObject->getMaterial()->getKd().y).c_str());
-		matkdz->value(std::to_string(_selectedObject->getMaterial()->getKd().z).c_str());
+		matkdx->value(noTrailing(std::to_string(_selectedObject->getMaterial()->getKd().x)).c_str());
+		matkdy->value(noTrailing(std::to_string(_selectedObject->getMaterial()->getKd().y)).c_str());
+		matkdz->value(noTrailing(std::to_string(_selectedObject->getMaterial()->getKd().z)).c_str());
 
-		matksx->value(std::to_string(_selectedObject->getMaterial()->getKs().x).c_str());
-		matksy->value(std::to_string(_selectedObject->getMaterial()->getKs().y).c_str());
-		matksz->value(std::to_string(_selectedObject->getMaterial()->getKs().z).c_str());
+		matksx->value(noTrailing(std::to_string(_selectedObject->getMaterial()->getKs().x)).c_str());
+		matksy->value(noTrailing(std::to_string(_selectedObject->getMaterial()->getKs().y)).c_str());
+		matksz->value(noTrailing(std::to_string(_selectedObject->getMaterial()->getKs().z)).c_str());
 	}
 	else
 	{
@@ -186,6 +197,7 @@ MyGlWindow::MyGlWindow(int x, int y, int w, int h)
 	buttonDeleteModel->callback(DeleteModelCallback, (void *)this);
 
 	choiceSimpleObjectSpawner = new Fl_Choice(w + 115, 50, 125, 20, "Simple object");
+	choiceSimpleObjectSpawner->add("Floor");
 	choiceSimpleObjectSpawner->add("Sphere");
 	choiceSimpleObjectSpawner->callback(changeSimpleObjectSelection, (void *)this);
 
@@ -236,7 +248,6 @@ MyGlWindow::MyGlWindow(int x, int y, int w, int h)
 
 	mode(FL_RGB | FL_ALPHA | FL_DOUBLE | FL_STENCIL);
 	first = 0;
-	m_floor = 0;
 	glm::vec3 viewPoint(DEFAULT_VIEW_POINT[0], DEFAULT_VIEW_POINT[1], DEFAULT_VIEW_POINT[2]);
 	glm::vec3 viewCenter(DEFAULT_VIEW_CENTER[0], DEFAULT_VIEW_CENTER[1], DEFAULT_VIEW_CENTER[2]);
 	glm::vec3 upVector(DEFAULT_UP_VECTOR[0], DEFAULT_UP_VECTOR[1], DEFAULT_UP_VECTOR[2]);
@@ -283,8 +294,8 @@ void MyGlWindow::draw(void)
 
 	glm::mat4 projection = glm::perspective(45.0f, 1.0f*w() / h(), 0.1f, 500.0f);
 
-	if (m_floor)
-		m_floor->draw(m_model.getMatrix(), view, projection);
+	//if (m_floor)
+	//	m_floor->draw(m_model.getMatrix(), view, projection);
 
 	//m_model.glPushMatrix();
 	//m_model.glTranslate(0, 1, 0);
@@ -311,10 +322,6 @@ MyGlWindow::~MyGlWindow()
 {
 	if (_lightManager)
 		delete _lightManager;
-	if (m_floor)
-		delete m_floor;
-	if (_sphere1)
-		delete _sphere1;
 }
 
 #include "PhongShader.h"
@@ -336,10 +343,10 @@ void MyGlWindow::initialize()
 		glm::vec3(1, 0, 0)
 	);
 
-	_sphere1 = new Sphere(1.0, 60, 60, new PhongShader(), _lightManager);
-	_objectList.push_back(_sphere1);
+	_objectList.push_back(new checkeredFloor());
+	browser->add("Floor");
+	_objectList.push_back(new Sphere(1.0, 60, 60, new PhongShader(), _lightManager));
 	browser->add("Sphere");
-	m_floor = new checkeredFloor();
 }
 
 

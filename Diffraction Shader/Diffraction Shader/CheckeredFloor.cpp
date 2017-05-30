@@ -7,15 +7,34 @@
 float floorColor1[3] = { .7f, .7f, .7f }; // Light color
 float floorColor2[3] = { .3f, .3f, .3f }; // Dark color
 
+int nvert;
+
+void checkeredFloor::Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)
+{
+	glm::mat4 mview = view * model;
+	glm::mat4 mvp = projection * view * model;
+
+	shaderProgram->use();
+
+	glUniformMatrix4fv(shaderProgram->uniform("MVP"), 1, GL_FALSE, glm::value_ptr(mvp));
+
+	glBindVertexArray(vaoHandle);
+	glDrawArrays(GL_TRIANGLES, 0, nvert * 3);
+
+
+	shaderProgram->disable();
+}
+
 checkeredFloor::checkeredFloor()
 {
 	setup(50, 16);
 }
 
-int nvert;
-
 void checkeredFloor::setup(float size, int nSquares)
 {
+	IDrawable::Initialise(nullptr);
+	this->setMaterial(new material(glm::vec3(), glm::vec3(), glm::vec3(), 180.0f));
+
 	std::vector <glm::vec4> vlists;
 	std::vector <glm::vec3> clists;
 

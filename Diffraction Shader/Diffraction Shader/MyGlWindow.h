@@ -70,8 +70,6 @@ private:
 	LightManager * _lightManager;
 
 	Viewer *m_viewer;
-	checkeredFloor * m_floor;
-	Sphere * _sphere1;
 	Model m_model;
 
 	// Position editor
