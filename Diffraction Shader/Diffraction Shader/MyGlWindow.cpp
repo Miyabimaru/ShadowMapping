@@ -339,12 +339,12 @@ void MyGlWindow::initialize()
 		glm::vec3(1, 1, 1)
 	);
 
-	_lightManager->addPointLight(
+	/*_lightManager->addPointLight(
 		glm::vec4(0, 50, 0, 1),
 		glm::vec3(1, 0, 0),
 		glm::vec3(1, 0, 0),
 		glm::vec3(1, 0, 0)
-	);
+	);*/
 
 	_objectList.push_back(new checkeredFloor());
 	browser->add("Floor");

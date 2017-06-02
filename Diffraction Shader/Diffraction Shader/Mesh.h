@@ -19,6 +19,8 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include "material.h"
+
 #include "Loader.h"
 
 struct Vertex {
@@ -45,8 +47,8 @@ public:
 	std::vector<Texture> textures;
 
 	/* Functions */
-	Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures);
-	void draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection);
+	Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures, material * mat);
+	void draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection, material * mat);
 private:
 	/* Render data */
 	GLuint VAO, VBO, EBO;

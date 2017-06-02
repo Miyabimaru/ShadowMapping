@@ -3,7 +3,7 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures)
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures, material * mat)
 {
 	this->vertices = vertices;
 	this->indices = indices;
@@ -18,6 +18,8 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vecto
 	}
 	else
 		shaderProgram->initFromFiles("modelLoader.vert", "modelLoader.frag");
+
+	//if (mat != nullptr) mat->setup();
 
 	shaderProgram->addUniform("NormalMatrix");
 	shaderProgram->addUniform("LightPosition");  //Light Position
@@ -60,14 +62,14 @@ void Mesh::setupMesh()
 	glBindVertexArray(0);
 }
 
-void Mesh::draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)
+void Mesh::draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection, material * mat)
 {
 	glm::mat4 mview = view * model;
 	glm::mat4 mvp = projection * view * model;
 	glm::vec4 lightPos(10, 10, 10, 0);
 	glm::vec3 LightIntensity(0.8, 0.8, 0.8);
 
-	glm::vec3 Ka(0.3, 0.3, 0.3);
+	glm::vec3 Ka(0.9, 0.9, 0.9);
 	//glm::vec3 Kd(0.8, 0.8, 0.8);
 	glm::vec3 Ks(0.1, 0.1, 0.1);
 
@@ -77,6 +79,8 @@ void Mesh::draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)
 	glm::mat3 nmat = glm::mat3(glm::transpose(imvp));
 
 	shaderProgram->use();
+
+	//if (mat != nullptr) mat->draw();
 
 	glUniformMatrix4fv(shaderProgram->uniform("ModelViewMatrix"), 1, GL_FALSE, glm::value_ptr(mview));
 	glUniformMatrix3fv(shaderProgram->uniform("NormalMatrix"), 1, GL_FALSE, glm::value_ptr(nmat));

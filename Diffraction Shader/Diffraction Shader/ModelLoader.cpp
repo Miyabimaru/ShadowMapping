@@ -100,7 +100,7 @@ Mesh ModelLoader::processMesh(aiMesh* mesh, const aiScene* scene)
 			textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 		}
 	}
-	return Mesh(vertices, indices, textures);
+	return Mesh(vertices, indices, textures, nullptr);
 }
 
 std::vector<Texture> ModelLoader::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
@@ -122,13 +122,13 @@ std::vector<Texture> ModelLoader::loadMaterialTextures(aiMaterial* mat, aiTextur
 void ModelLoader::Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)
 {
 	for (GLuint i = 0; i < this->meshes.size(); i++)
-		this->meshes[i].draw(model, view, projection);
+		this->meshes[i].draw(model, view, projection, nullptr);
 }
 
 void ModelLoader::draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)
 {
 	for (GLuint i = 0; i < this->meshes.size(); i++)
-		this->meshes[i].draw(model, view, projection);
+		this->meshes[i].draw(model, view, projection, nullptr);
 }
 
 GLint TextureFromFile(const char* path, std::string directory)
