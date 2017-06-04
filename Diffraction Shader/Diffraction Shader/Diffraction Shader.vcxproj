@@ -22,6 +22,7 @@
     <ClInclude Include="CheckeredFloor.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="IDrawable.h" />
+    <ClInclude Include="ILight.h" />
     <ClInclude Include="IShader.h" />
     <ClInclude Include="PhongShader.h" />
     <ClInclude Include="PointLight.h" />
@@ -32,11 +33,13 @@
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ModelView.h" />
     <ClInclude Include="MyGlWindow.h" />
+    <ClInclude Include="ShadowMapShader.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Viewer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CheckeredFloor.cpp" />
+    <ClCompile Include="ILight.cpp" />
     <ClCompile Include="IShader.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
@@ -47,6 +50,7 @@
     <ClCompile Include="material.cpp" />
     <ClCompile Include="ModelView.cpp" />
     <ClCompile Include="MyGlWindow.cpp" />
+    <ClCompile Include="ShadowMapShader.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Viewer.cpp" />
@@ -57,6 +61,8 @@
     <None Include="modelLoader.frag" />
     <None Include="modelLoader.vert" />
     <None Include="modelLoaderTexture.frag" />
+    <None Include="shadow_map.frag" />
+    <None Include="shadow_map.vert" />
     <None Include="simple_phong.frag" />
     <None Include="simple_phong.vert" />
   </ItemGroup>

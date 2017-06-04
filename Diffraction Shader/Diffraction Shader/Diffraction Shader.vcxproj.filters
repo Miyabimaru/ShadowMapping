@@ -1,54 +1,120 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="CheckeredFloor.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="IDrawable.cpp" />
-    <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="material.cpp" />
     <ClCompile Include="ModelView.cpp" />
     <ClCompile Include="MyGlWindow.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Viewer.cpp" />
-    <ClCompile Include="IShader.cpp" />
-    <ClCompile Include="PhongShader.cpp" />
+    <ClCompile Include="ILight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="LightManager.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="IShader.cpp">
+      <Filter>Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="PhongShader.cpp">
+      <Filter>Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMapShader.cpp">
+      <Filter>Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckeredFloor.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelLoader.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CheckeredFloor.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="IDrawable.h" />
-    <ClInclude Include="PointLight.h" />
-    <ClInclude Include="LightManager.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="material.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ModelView.h" />
     <ClInclude Include="MyGlWindow.h" />
-    <ClInclude Include="Sphere.h" />
     <ClInclude Include="Viewer.h" />
-    <ClInclude Include="IShader.h" />
-    <ClInclude Include="PhongShader.h" />
+    <ClInclude Include="ILight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="IShader.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="PhongShader.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMapShader.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckeredFloor.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelLoader.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="floor.frag" />
-    <None Include="floor.vert" />
-    <None Include="modelLoader.frag" />
-    <None Include="modelLoader.vert" />
-    <None Include="modelLoaderTexture.frag" />
     <None Include="simple_phong.frag">
       <Filter>Shaders</Filter>
     </None>
     <None Include="simple_phong.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="shadow_map.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shadow_map.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="floor.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="floor.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="modelLoader.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="modelLoader.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="modelLoaderTexture.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
       <UniqueIdentifier>{58f50cf7-de15-4a85-8a97-4ce0bad27c9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lights">
+      <UniqueIdentifier>{3358f780-691c-4f6f-b8a4-815259aa373f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry">
+      <UniqueIdentifier>{0514a9f0-1577-4e45-987b-49f86618da6e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

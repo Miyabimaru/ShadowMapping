@@ -36,6 +36,7 @@
 #include "IDrawable.h"
 #include "material.h"
 #include "LightManager.h"
+#include "ILight.h"
 
 #pragma warning(pop)
 
@@ -49,6 +50,7 @@ public:
 	Fl_Choice *choiceSimpleObjectSpawner;
 	std::string currentSimpleObjectName;
 	std::vector<IDrawable *> _objectList;
+	std::vector<ILight *> _lightList;
 
 	IDrawable * _selectedObject;
 

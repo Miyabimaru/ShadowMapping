@@ -16,8 +16,9 @@
 #include <vector>
 
 #include "IDrawable.h"
+#include "ILight.h"
 
-class PointLight
+class PointLight : public ILight
 {
 private:
 	GLuint Id;
@@ -28,10 +29,10 @@ public:
 	glm::vec3 Ld;
 	glm::vec3 Ls;
 
-// Idrawable Functions
+// ILight Functions
 public:
-	virtual void Initialise(IShader * shader);
-	virtual void Draw(IShader * shader, glm::mat4 model, glm::mat4 view, glm::mat4 projection);
+	virtual void Initialise(IShader * shader) override;
+	virtual void Draw(IShader * shader, glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
 public:
 	PointLight(glm::vec4 p, glm::vec3 la, glm::vec3 ld, glm::vec3 ls, GLuint id);

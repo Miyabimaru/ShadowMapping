@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef _PHONG_SHADER_H_
-#define _PHONG_SHADER_H_
+#ifndef _SHADOW_MAP_SHADER_H_
+#define _SHADOW_MAP_SHADER_H_
 
 #include "GL/glew.h"
 #include <GL/GL.h>
@@ -12,16 +12,21 @@
 
 #include "IShader.h"
 
-class PhongShader : public IShader
+class ShadowMapShader : public IShader
 {
 public:
 	virtual void Initialise();
 	virtual void Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection);
 
+private:
+	const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+	unsigned int depthMapFBO;
+	unsigned int depthMap;
+
 public:
-	PhongShader();
-	~PhongShader();
+	ShadowMapShader();
+	~ShadowMapShader();
 };
 
 
-#endif // !_PHONG_SHADER_H_
+#endif // !_SHADOW_MAP_SHADER_H_
