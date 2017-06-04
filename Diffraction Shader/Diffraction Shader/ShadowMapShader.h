@@ -18,11 +18,6 @@ public:
 	virtual void Initialise();
 	virtual void Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection);
 
-private:
-	const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-	unsigned int depthMapFBO;
-	unsigned int depthMap;
-
 public:
 	ShadowMapShader();
 	~ShadowMapShader();

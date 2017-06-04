@@ -308,6 +308,32 @@ void MyGlWindow::draw(void)
 
 	if (_objectList.size() > 0)
 	{
+		ShadowMap * _shadowMap = new ShadowMap();
+
+		_shadowMap->GenerateMap();
+
+		// 1. first render to depth map
+		glViewport(0, 0, _shadowMap->SHADOW_WIDTH, _shadowMap->SHADOW_HEIGHT);
+		glBindFramebuffer(GL_FRAMEBUFFER, _shadowMap->getFBO());
+		glClear(GL_DEPTH_BUFFER_BIT);
+		
+		for each (IDrawable *model in _objectList)
+		{
+			//m_model.glTranslate(2, 0, 0);
+			m_model.glPushMatrix();
+			m_model.glTranslate(model->getPosition().x, model->getPosition().y, model->getPosition().z);
+			model->Draw(m_model.getMatrix(), view, projection);
+			m_model.glPopMatrix();
+		}
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+		// 2. then render scene as normal with shadow mapping (using depth map)
+		glViewport(0, 0, 1050, 800);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glBindTexture(GL_TEXTURE_2D, _shadowMap->getDepthMap());
+
 		for each (IDrawable *model in _objectList)
 		{
 			//m_model.glTranslate(2, 0, 0);

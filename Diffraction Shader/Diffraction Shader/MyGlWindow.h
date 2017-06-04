@@ -37,6 +37,7 @@
 #include "material.h"
 #include "LightManager.h"
 #include "ILight.h"
+#include "ShadowMap.h"
 
 #pragma warning(pop)
 
