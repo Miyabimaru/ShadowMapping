@@ -319,7 +319,6 @@ void MyGlWindow::draw(void)
 		
 		for each (IDrawable *model in _objectList)
 		{
-			//m_model.glTranslate(2, 0, 0);
 			m_model.glPushMatrix();
 			m_model.glTranslate(model->getPosition().x, model->getPosition().y, model->getPosition().z);
 			model->Draw(m_model.getMatrix(), view, projection);
@@ -330,13 +329,12 @@ void MyGlWindow::draw(void)
 
 
 		// 2. then render scene as normal with shadow mapping (using depth map)
-		glViewport(0, 0, 1050, 800);
+		glViewport(0, 0, 770, 780);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glBindTexture(GL_TEXTURE_2D, _shadowMap->getDepthMap());
 
 		for each (IDrawable *model in _objectList)
 		{
-			//m_model.glTranslate(2, 0, 0);
 			m_model.glPushMatrix();
 			m_model.glTranslate(model->getPosition().x, model->getPosition().y, model->getPosition().z);
 			model->Draw(m_model.getMatrix(), view, projection);
