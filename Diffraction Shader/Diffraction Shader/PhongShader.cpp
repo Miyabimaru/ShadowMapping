@@ -35,4 +35,5 @@ PhongShader::PhongShader()
 
 PhongShader::~PhongShader()
 {
+	if (_shaderProgram) delete _shaderProgram;
 }

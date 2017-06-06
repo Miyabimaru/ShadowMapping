@@ -35,4 +35,5 @@ ShadowMapShader::ShadowMapShader()
 
 ShadowMapShader::~ShadowMapShader()
 {
+	if (_shaderProgram) delete _shaderProgram;
 }
