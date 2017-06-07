@@ -370,10 +370,10 @@ void MyGlWindow::initialize()
 		glm::vec3(1, 0, 0)
 	);*/
 
-	_objectList.push_back(new checkeredFloor());
-	browser->add("Floor");
 	_objectList.push_back(new Sphere(1.0, 60, 60, new PhongShader(), _lightManager));
 	browser->add("Sphere");
+	_objectList.push_back(new checkeredFloor());
+	browser->add("Floor");
 }
 
 
