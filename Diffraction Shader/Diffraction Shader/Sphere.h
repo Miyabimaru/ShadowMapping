@@ -23,9 +23,11 @@ public:
 
 public:
 	Sphere(IShader * shader, LightManager * lightManager, std::string vertexShader, std::string fragmentShader);
-	Sphere(float rad, GLuint sl, GLuint st, IShader * shader, LightManager * lightManager);
+	Sphere(float rad, GLuint sl, GLuint st, IShader * shader, LightManager * lightManager, IShader * depthShader = nullptr);
 	~Sphere();
 	
+	void InitShader(IShader * shad = nullptr);
+
 	int getVertexArrayHandle();
 
 	GLuint VAO, VBO_position, VBO_normal, VBO_tex, IBO;

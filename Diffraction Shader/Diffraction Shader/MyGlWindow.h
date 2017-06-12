@@ -71,6 +71,7 @@ private:
 	int first;
 
 	LightManager * _lightManager;
+	ShadowMap * _shadowMap;
 
 	Viewer *m_viewer;
 	Model m_model;

@@ -21,7 +21,7 @@ Sphere::~Sphere()
 
 
 //set rad = 1.0  sl, st = 60.
-Sphere::Sphere(float rad, GLuint sl, GLuint st, IShader * shader, LightManager * lightManager) :
+Sphere::Sphere(float rad, GLuint sl, GLuint st, IShader * shader, LightManager * lightManager, IShader * depthShader) :
 radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader)
 {
 	//glActiveTexture(GL_TEXTURE0);
@@ -56,6 +56,16 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader
 
 	nVerts = (slices + 1) * (stacks + 1);  //the number of vertices
 	elements = (slices * 2 * (stacks - 1)) * 3; 
+	
+	//InitShader();
+	if (depthShader != nullptr)
+		InitShader(depthShader);
+}
+
+void Sphere::InitShader(IShader * shad)
+{
+	if (shad == nullptr)
+		shad = _shader;
 
 	// Vertices
 	float * v = new float[3 * nVerts];
@@ -69,16 +79,16 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader
 	unsigned int * el = new unsigned int[elements];
 
 	// Generate the vertex data : this function fill all data into the arrays.
-	generateVerts(v, n, tex, el);  
+	generateVerts(v, n, tex, el);
 
-		//Shader
-	if (_shader) _shader->Initialise();
+	//Shader
+	if (shad) shad->Initialise();
 
-		//light
-	if (_lightManager) _lightManager->Initialise(_shader);
+	//light
+	if (_lightManager) _lightManager->Initialise(shad);
 
-		//Material
-	if (_material) _material->setup(_shader);
+	//Material
+	if (_material) _material->setup(shad);
 
 	//create vao
 	glGenVertexArrays(1, &VAO);
@@ -91,14 +101,14 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_position);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * nVerts, v, GL_STATIC_DRAW);
 	glVertexAttribPointer(
-		_shader->getShaderProgram()->attribute("vertexPosition"), // attribute
+		shad->getShaderProgram()->attribute("vertexPosition"), // attribute
 		3,                 // number of elements per vertex, here (x,y,z,1)
 		GL_FLOAT,          // the type of each element
 		GL_FALSE,          // take our values as-is
 		0,                 // no extra data between each position
 		0                  // offset of first element
 	);
-	glEnableVertexAttribArray(_shader->getShaderProgram()->attribute("vertexPosition"));
+	glEnableVertexAttribArray(shad->getShaderProgram()->attribute("vertexPosition"));
 
 	//create vbo for normals
 	glGenBuffers(1, &VBO_normal);
@@ -106,35 +116,34 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * nVerts * 3, n, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(
-		_shader->getShaderProgram()->attribute("vertexNormal"), // attribute
+		shad->getShaderProgram()->attribute("vertexNormal"), // attribute
 		3,                 // number of elements per vertex, here (x,y,z,1)
 		GL_FLOAT,          // the type of each element
 		GL_FALSE,          // take our values as-is
 		0,                 // no extra data between each position
 		0                  // offset of first element
 	);
-	glEnableVertexAttribArray(_shader->getShaderProgram()->attribute("vertexNormal"));
+	glEnableVertexAttribArray(shad->getShaderProgram()->attribute("vertexNormal"));
 
 	// Create VBO for texture
-	//glGenBuffers(1, &VBO_tex);
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO_tex);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * nVerts, tex, GL_STATIC_DRAW);
-	//glVertexAttribPointer(
-	//	_shader->getShaderProgram()->attribute("VertexTexCoord"), // attribute
-	//	2,                 // number of elements per vertex, here (x,y,z,1)
-	//	GL_FLOAT,          // the type of each element
-	//	GL_FALSE,          // take our values as-is
-	//	0,                 // no extra data between each position
-	//	0                  // offset of first element
-	//);
-	//glEnableVertexAttribArray(_shader->getShaderProgram()->attribute("VertexTexCoord"));
+	glGenBuffers(1, &VBO_tex);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_tex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * nVerts, tex, GL_STATIC_DRAW);
+	glVertexAttribPointer(
+		shad->getShaderProgram()->attribute("VertexTexCoord"), // attribute
+		2,                 // number of elements per vertex, here (x,y,z,1)
+		GL_FLOAT,          // the type of each element
+		GL_FALSE,          // take our values as-is
+		0,                 // no extra data between each position
+		0                  // offset of first element
+	);
+	glEnableVertexAttribArray(shad->getShaderProgram()->attribute("VertexTexCoord"));
 
 	glGenBuffers(1, &IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * elements, el, GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
-	
 }
 
 void Sphere::Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection) 
