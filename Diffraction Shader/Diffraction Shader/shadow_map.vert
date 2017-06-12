@@ -6,5 +6,5 @@ uniform mat4 model;
 
 void main()
 {
-	gl_Position = lightSpaceMatrix * model * vec4(vertexPosition);
+	gl_Position = lightSpaceMatrix * model * vertexPosition;
 }

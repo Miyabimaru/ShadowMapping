@@ -60,6 +60,8 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader
 	//InitShader();
 	if (depthShader != nullptr)
 		InitShader(depthShader);
+	else
+		InitShader();
 }
 
 void Sphere::InitShader(IShader * shad)
@@ -170,15 +172,18 @@ void Sphere::Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)
 
 void Sphere::DrawDepth(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection, IShader * depthShader)
 {
-	if (depthShader) depthShader->Draw(model, view, projection);
+	if (depthShader)
+	{
+		depthShader->Draw(model, view, projection);
 
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	int size;
-	glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
-	glDrawElements(GL_TRIANGLES, size / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(VAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+		int size;
+		glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+		glDrawElements(GL_TRIANGLES, size / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
-	_shader->getShaderProgram()->disable();
+		depthShader->getShaderProgram()->disable();
+	}
 }
 
 void Sphere::generateVerts(float * verts, float * norms, float * tex,
