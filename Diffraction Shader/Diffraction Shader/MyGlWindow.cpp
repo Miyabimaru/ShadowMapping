@@ -308,7 +308,6 @@ void MyGlWindow::draw(void)
 
 	if (_objectList.size() > 0)
 	{
-		ShadowMap * _shadowMap = new ShadowMap();
 
 		_shadowMap->GenerateMap();
 
@@ -329,7 +328,7 @@ void MyGlWindow::draw(void)
 
 
 		// 2. then render scene as normal with shadow mapping (using depth map)
-		glViewport(0, 0, 770, 780);
+		/*glViewport(0, 0, 770, 780);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glBindTexture(GL_TEXTURE_2D, _shadowMap->getDepthMap());
 
@@ -339,7 +338,7 @@ void MyGlWindow::draw(void)
 			m_model.glTranslate(model->getPosition().x, model->getPosition().y, model->getPosition().z);
 			model->Draw(m_model.getMatrix(), view, projection);
 			m_model.glPopMatrix();
-		}
+		}*/
 	}
 
 	//m_model.glPopMatrix();
@@ -369,11 +368,11 @@ void MyGlWindow::initialize()
 		glm::vec3(1, 0, 0),
 		glm::vec3(1, 0, 0)
 	);*/
-
-	_objectList.push_back(new Sphere(1.0, 60, 60, new PhongShader(), _lightManager));
+	_shadowMap = new ShadowMap();
+	_objectList.push_back(new Sphere(1.0, 60, 60, new PhongShader(), _lightManager, _shadowMap->getShader()));
 	browser->add("Sphere");
-	_objectList.push_back(new checkeredFloor());
-	browser->add("Floor");
+	/*_objectList.push_back(new checkeredFloor());
+	browser->add("Floor");*/
 }
 
 
