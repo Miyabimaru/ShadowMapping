@@ -1,41 +1,26 @@
 #version 440
 
 layout (location = 0) in vec4 vertexPosition;
-layout (location = 1) in vec3 vertexNormal; 
+layout (location = 1) in vec3 vertexNormal;
+layout (location = 2) in vec2 texCoords;
 
-// Define structures
-struct LightInfo {
-	vec4 Position;
-	vec3 La;
-	vec3 Ld;
-	vec3 Ls;
-};
+out VS_OUT {
+	vec3 FragPos;
+	vec3 Normal;
+	vec2 TexCoords;
+	vec4 FragPosLightSpace;
+} vs_out;
 
-struct MaterialInfo {
-	vec3 Ka;
-	vec3 Kd;
-	vec3 Ks;
-	float Shiness;
-};
-
-// Uniform values
-uniform LightInfo PointLights[5];
-uniform MaterialInfo Material;
-
-uniform mat4 MVP;
-uniform mat3 normalMatrix; 
-uniform mat4 ModelViewMatrix;
-
-out vec4 Position;
-out vec3 Normal;
+uniform mat4 projection;
+uniform mat4 view; 
+uniform mat4 model;
+uniform mat4 lightSpaceMatrix;
 
 void main()
 {
-	vec3 N = normalize( normalMatrix * vertexNormal);
-	vec4 P = ModelViewMatrix * vertexPosition;
-	
-	Position = P;
-	Normal = N;
-
-	gl_Position = MVP * vertexPosition;
+	vs_out.FragPos = vec3(model * vertexPosition);
+    vs_out.Normal = transpose(inverse(mat3(model))) * vertexNormal;
+    vs_out.TexCoords = texCoords;
+    vs_out.FragPosLightSpace = lightSpaceMatrix * vec4(vs_out.FragPos, 1.0);
+    gl_Position = projection * view * model * vertexPosition;
 }
