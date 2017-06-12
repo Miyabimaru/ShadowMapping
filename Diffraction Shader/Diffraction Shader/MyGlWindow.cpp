@@ -326,6 +326,13 @@ void MyGlWindow::draw(void)
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+		// DEBUG RENDER DEPTH MAP
+		glViewport(0, 0, 770, 780);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _shadowMap->getDepthMap());
+		_shadowMap->getDebugShader()->Draw(m_model.getMatrix(), view, projection);
+		// END DEBUG
 
 		// 2. then render scene as normal with shadow mapping (using depth map)
 		/*glViewport(0, 0, 770, 780);

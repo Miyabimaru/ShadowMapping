@@ -14,12 +14,15 @@
 
 class ShadowMapShader : public IShader
 {
+private:
+	bool _debug;
+
 public:
 	virtual void Initialise();
 	virtual void Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection);
 
 public:
-	ShadowMapShader();
+	ShadowMapShader(bool debug = false);
 	~ShadowMapShader();
 };
 

@@ -60,6 +60,8 @@
   <ItemGroup>
     <None Include="debug_quad.frag" />
     <None Include="debug_quad.vert" />
+    <None Include="debug_shadow_map.frag" />
+    <None Include="debug_shadow_map.vert" />
     <None Include="floor.frag" />
     <None Include="floor.vert" />
     <None Include="modelLoader.frag" />

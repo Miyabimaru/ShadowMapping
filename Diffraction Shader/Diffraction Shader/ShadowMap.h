@@ -26,11 +26,13 @@ public:
 	unsigned int getFBO(void);
 	unsigned int getDepthMap(void);
 	IShader * getShader(void);
+	IShader * getDebugShader(void);
 
 private:
 	unsigned int depthMapFBO;
 	unsigned int depthMap;
 	IShader * _shader;
+	IShader * _debugShader;
 };
 
 #endif // !_SHADOW_MAP_H_

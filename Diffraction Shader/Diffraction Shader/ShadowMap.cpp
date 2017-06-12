@@ -4,6 +4,9 @@ ShadowMap::ShadowMap()
 {
 	_shader = new ShadowMapShader();
 	_shader->Initialise();
+
+	_debugShader = new ShadowMapShader(true);
+	_debugShader->Initialise();
 }
 
 ShadowMap::~ShadowMap()
@@ -21,6 +24,11 @@ unsigned int ShadowMap::getDepthMap() {
 IShader * ShadowMap::getShader(void)
 {
 	return _shader;
+}
+
+IShader * ShadowMap::getDebugShader(void)
+{
+	return _debugShader;
 }
 
 void ShadowMap::GenerateMap() {

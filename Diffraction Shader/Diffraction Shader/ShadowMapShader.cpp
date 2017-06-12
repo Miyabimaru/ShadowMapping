@@ -3,12 +3,20 @@
 void ShadowMapShader::Initialise()
 {
 	_shaderProgram = new ShaderProgram();
-	_shaderProgram->initFromFiles("shadow_map.vert", "shadow_map.frag");
+	if (_debug)
+		_shaderProgram->initFromFiles("debug_shadow_map.vert", "debug_shadow_map.frag");
+	else
+		_shaderProgram->initFromFiles("shadow_map.vert", "shadow_map.frag");
 
 	//add attributes and uniform vars
 	_shaderProgram->use();
+	_shaderProgram->addAttribute("vertexPosition");
+	_shaderProgram->addAttribute("VertexTexCoord");
 	_shaderProgram->addUniform("lightSpaceMatrix"); // Light Point of view : mat4
 	_shaderProgram->addUniform("model"); // Model : mat4
+	_shaderProgram->addUniform("depthMap");
+	_shaderProgram->addUniform("near_plane");
+	_shaderProgram->addUniform("far_plane");
 }
 
 void ShadowMapShader::Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection)
@@ -25,11 +33,13 @@ void ShadowMapShader::Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection
 
 	_shaderProgram->use();
 
+	glUniform1f(_shaderProgram->uniform("near_plane"), near_plane);
+	glUniform1f(_shaderProgram->uniform("far_plane"), far_plane);
 	glUniformMatrix4fv(_shaderProgram->uniform("model"), 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(_shaderProgram->uniform("lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 }
 
-ShadowMapShader::ShadowMapShader()
+ShadowMapShader::ShadowMapShader(bool debug) : _debug(debug)
 {
 }
 
