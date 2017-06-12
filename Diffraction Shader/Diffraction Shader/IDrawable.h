@@ -22,6 +22,7 @@ protected:
 public:
 	virtual void Initialise(IShader * shader);
 	virtual void Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection) = 0;
+	virtual void DrawDepth(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection, IShader * depthShader) = 0;
 
 	material * const getMaterial(void);
 	virtual void setMaterial(material * mat);

@@ -123,6 +123,10 @@ void ModelLoader::Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projecti
 {
 	for (GLuint i = 0; i < this->meshes.size(); i++)
 		this->meshes[i].draw(model, view, projection, nullptr);
+}
+
+void ModelLoader::DrawDepth(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection, IShader * depthShader)
+{
 }
 
 void ModelLoader::draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)

@@ -33,6 +33,7 @@ public:
 public:
 	//virtual void Initialise(IShader * shader);
 	virtual void Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection);
+	virtual void DrawDepth(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection, IShader * depthShader);
 
 private:
 	/* Model Data */
@@ -44,4 +45,4 @@ private:
 	void processNode(aiNode* node, const aiScene* scene);
 	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 	std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
-};
+};

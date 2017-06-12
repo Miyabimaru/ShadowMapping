@@ -10,6 +10,9 @@
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "IShader.h"
+#include "ShadowMapShader.h"
+
 class ShadowMap
 {
 public:
@@ -22,10 +25,12 @@ public:
 	void GenerateMap(void);
 	unsigned int getFBO(void);
 	unsigned int getDepthMap(void);
+	IShader * getShader(void);
 
 private:
 	unsigned int depthMapFBO;
 	unsigned int depthMap;
+	IShader * _shader;
 };
 
 #endif // !_SHADOW_MAP_H_
