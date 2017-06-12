@@ -19,6 +19,7 @@ class Sphere : public IDrawable
 public:
 	//virtual void Initialise(IShader * shader);
 	virtual void Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection);
+	virtual void DrawDepth(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection, IShader * depthShader);
 
 public:
 	Sphere(IShader * shader, LightManager * lightManager, std::string vertexShader, std::string fragmentShader);

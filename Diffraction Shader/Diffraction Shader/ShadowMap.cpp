@@ -2,7 +2,7 @@
 
 ShadowMap::ShadowMap()
 {
-
+	_shader = new ShadowMapShader();
 }
 
 ShadowMap::~ShadowMap()
@@ -15,6 +15,11 @@ unsigned int ShadowMap::getFBO() {
 
 unsigned int ShadowMap::getDepthMap() {
 	return depthMap;
+}
+
+IShader * ShadowMap::getShader(void)
+{
+	return _shader;
 }
 
 void ShadowMap::GenerateMap() {

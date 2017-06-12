@@ -25,6 +25,17 @@ void checkeredFloor::Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & proje
 	shaderProgram->disable();
 }
 
+void checkeredFloor::DrawDepth(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection, IShader * depthShader)
+{
+	if (depthShader) depthShader->Draw(model, view, projection);
+
+	glBindVertexArray(vaoHandle);
+	glDrawArrays(GL_TRIANGLES, 0, nvert * 3);
+
+
+	shaderProgram->disable();
+}
+
 checkeredFloor::checkeredFloor()
 {
 	setup(50, 16);

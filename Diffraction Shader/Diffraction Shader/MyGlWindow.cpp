@@ -321,7 +321,7 @@ void MyGlWindow::draw(void)
 		{
 			m_model.glPushMatrix();
 			m_model.glTranslate(model->getPosition().x, model->getPosition().y, model->getPosition().z);
-			model->Draw(m_model.getMatrix(), view, projection);
+			model->DrawDepth(m_model.getMatrix(), view, projection, _shadowMap->getShader());
 			m_model.glPopMatrix();
 		}
 
