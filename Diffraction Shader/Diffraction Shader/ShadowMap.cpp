@@ -3,6 +3,7 @@
 ShadowMap::ShadowMap()
 {
 	_shader = new ShadowMapShader();
+	_shader->Initialise();
 }
 
 ShadowMap::~ShadowMap()
