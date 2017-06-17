@@ -325,7 +325,7 @@ void MyGlWindow::draw(void)
 		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+		
 		// DEBUG RENDER DEPTH MAP
 		glViewport(0, 0, 770, 780);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -335,7 +335,7 @@ void MyGlWindow::draw(void)
 		// END DEBUG
 
 		// 2. then render scene as normal with shadow mapping (using depth map)
-		/*glViewport(0, 0, 770, 780);
+		glViewport(0, 0, 770, 780);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glBindTexture(GL_TEXTURE_2D, _shadowMap->getDepthMap());
 
@@ -345,7 +345,7 @@ void MyGlWindow::draw(void)
 			m_model.glTranslate(model->getPosition().x, model->getPosition().y, model->getPosition().z);
 			model->Draw(m_model.getMatrix(), view, projection);
 			m_model.glPopMatrix();
-		}*/
+		}
 	}
 
 	//m_model.glPopMatrix();
