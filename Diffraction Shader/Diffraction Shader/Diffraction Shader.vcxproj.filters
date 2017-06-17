@@ -38,6 +38,7 @@
       <Filter>Geometry</Filter>
     </ClCompile>
     <ClCompile Include="ShadowMap.cpp" />
+    <ClCompile Include="DebugTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h" />
@@ -78,6 +79,7 @@
       <Filter>Geometry</Filter>
     </ClInclude>
     <ClInclude Include="ShadowMap.h" />
+    <ClInclude Include="DebugTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="simple_phong.frag">

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="CheckeredFloor.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="DebugTexture.h" />
     <ClInclude Include="IDrawable.h" />
     <ClInclude Include="ILight.h" />
     <ClInclude Include="IShader.h" />
@@ -40,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CheckeredFloor.cpp" />
+    <ClCompile Include="DebugTexture.cpp" />
     <ClCompile Include="ILight.cpp" />
     <ClCompile Include="IShader.cpp" />
     <ClCompile Include="Mesh.cpp" />

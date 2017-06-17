@@ -308,9 +308,6 @@ void MyGlWindow::draw(void)
 
 	if (_objectList.size() > 0)
 	{
-
-		_shadowMap->GenerateMap();
-
 		// 1. first render to depth map
 		glViewport(0, 0, _shadowMap->SHADOW_WIDTH, _shadowMap->SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, _shadowMap->getFBO());
@@ -376,6 +373,7 @@ void MyGlWindow::initialize()
 		glm::vec3(1, 0, 0)
 	);*/
 	_shadowMap = new ShadowMap();
+	_shadowMap->GenerateMap();
 	_objectList.push_back(new Sphere(1.0, 60, 60, new PhongShader(), _lightManager, _shadowMap->getShader()));
 	browser->add("Sphere");
 	/*_objectList.push_back(new checkeredFloor());
