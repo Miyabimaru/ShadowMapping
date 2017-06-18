@@ -1,4 +1,4 @@
-#version 400
+#version 440
 
 in vec4 Position;
 in vec3 Normal;
@@ -80,5 +80,6 @@ void main() {
 
 	vec3 LightIntensity = ambient + finalColor;
 
+	//FragColor = vec4(1.0, 1.0, 1.0, 1.0);
     FragColor = vec4(LightIntensity, 1.0);
 }

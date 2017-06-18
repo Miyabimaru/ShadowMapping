@@ -5,8 +5,8 @@ ShadowMap::ShadowMap()
 	_shader = new ShadowMapShader();
 	_shader->Initialise();
 
-	_debugShader = new ShadowMapShader(true);
-	_debugShader->Initialise();
+	//_debugShader = new ShadowMapShader(true);
+	//_debugShader->Initialise();
 }
 
 ShadowMap::~ShadowMap()

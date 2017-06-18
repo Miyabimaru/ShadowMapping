@@ -14,6 +14,8 @@
 #include "IDrawable.h"
 #include "IShader.h"
 
+#define MAX_SPHERE_SHADER (5)
+
 class Sphere : public IDrawable
 {
 public:
@@ -26,14 +28,14 @@ public:
 	Sphere(float rad, GLuint sl, GLuint st, IShader * shader, LightManager * lightManager, IShader * depthShader = nullptr);
 	~Sphere();
 	
-	void InitShader(IShader * shad = nullptr);
+	void InitShader(IShader * shad, float * v, float * n, float * tex, unsigned int * el);
 
 	int getVertexArrayHandle();
 
-	GLuint VAO, VBO_position, VBO_normal, VBO_tex, IBO;
+	GLuint * VAO, * VBO_position, * VBO_normal, * VBO_tex, * IBO;
+	GLuint _currentShaderCount;
 	GLuint tex_2d;
 
-	IShader * _shader;
 	LightManager * _lightManager;
 
 private:

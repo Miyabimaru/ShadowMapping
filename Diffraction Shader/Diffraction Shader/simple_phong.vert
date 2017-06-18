@@ -1,7 +1,8 @@
 #version 440
 
-layout (location = 0) in vec4 vertexPosition;
-layout (location = 1) in vec3 vertexNormal; 
+in vec4 vertexPosition;
+in vec3 vertexNormalTRUC;
+in vec3 VertexTexCoord; 
 
 // Define structures
 struct LightInfo {
@@ -31,7 +32,7 @@ out vec3 Normal;
 
 void main()
 {
-	vec3 N = normalize( normalMatrix * vertexNormal);
+	vec3 N = normalize( normalMatrix * vertexNormalTRUC);
 	vec4 P = ModelViewMatrix * vertexPosition;
 	
 	Position = P;

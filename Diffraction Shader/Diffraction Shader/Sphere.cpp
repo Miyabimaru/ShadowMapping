@@ -5,11 +5,13 @@
 #include <glm/mat3x3.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <exception>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 Sphere::Sphere(IShader * shader, LightManager * lightManager, std::string vertexShader, std::string fragmentShader) : _lightManager(lightManager)
 {
-
+	throw new std::exception("SPHERE BAD CONSTRUCTOR");
 }
 
 
@@ -22,8 +24,9 @@ Sphere::~Sphere()
 
 //set rad = 1.0  sl, st = 60.
 Sphere::Sphere(float rad, GLuint sl, GLuint st, IShader * shader, LightManager * lightManager, IShader * depthShader) :
-radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader)
+radius(rad), slices(sl), stacks(st), _lightManager(lightManager)
 {
+	IDrawable::Initialise(shader);
 	//glActiveTexture(GL_TEXTURE0);
 	//glGenTextures(1, &tex_2d);
 	//glBindTexture(GL_TEXTURE_2D, tex_2d);
@@ -57,18 +60,6 @@ radius(rad), slices(sl), stacks(st), _lightManager(lightManager), _shader(shader
 	nVerts = (slices + 1) * (stacks + 1);  //the number of vertices
 	elements = (slices * 2 * (stacks - 1)) * 3; 
 	
-	//InitShader();
-	if (depthShader != nullptr)
-		InitShader(depthShader);
-	else
-		InitShader();
-}
-
-void Sphere::InitShader(IShader * shad)
-{
-	if (shad == nullptr)
-		shad = _shader;
-
 	// Vertices
 	float * v = new float[3 * nVerts];
 	// Normals
@@ -83,6 +74,26 @@ void Sphere::InitShader(IShader * shad)
 	// Generate the vertex data : this function fill all data into the arrays.
 	generateVerts(v, n, tex, el);
 
+	_currentShaderCount = 0;
+	VAO = new GLuint[MAX_SPHERE_SHADER];
+	VBO_normal = new GLuint[MAX_SPHERE_SHADER];
+	VBO_position = new GLuint[MAX_SPHERE_SHADER];
+	VBO_tex = new GLuint[MAX_SPHERE_SHADER];
+	IBO = new GLuint[MAX_SPHERE_SHADER];
+
+	InitShader(_shader, v, n, tex, el);
+	if (depthShader != nullptr)
+		InitShader(depthShader, v, n, tex, el);
+}
+
+void Sphere::InitShader(IShader * shad, float * v, float * n, float * tex, unsigned int * el)
+{
+	if (shad == nullptr)
+		shad = _shader;
+
+	if (_currentShaderCount > MAX_SPHERE_SHADER)
+		throw new std::exception("TOO MANY SHADERS IN SPHERE");
+
 	//Shader
 	if (shad) shad->Initialise();
 
@@ -93,14 +104,14 @@ void Sphere::InitShader(IShader * shad)
 	if (_material) _material->setup(shad);
 
 	//create vao
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	glGenVertexArrays(1, &VAO[_currentShaderCount]);
+	glBindVertexArray(VAO[_currentShaderCount]);
 
 	//_shader->getShaderProgram()->addUniform("Tex1");
 
 	//create vbo for vertices
-	glGenBuffers(1, &VBO_position);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_position);
+	glGenBuffers(1, &VBO_position[_currentShaderCount]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_position[_currentShaderCount]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * nVerts, v, GL_STATIC_DRAW);
 	glVertexAttribPointer(
 		shad->getShaderProgram()->attribute("vertexPosition"), // attribute
@@ -113,23 +124,23 @@ void Sphere::InitShader(IShader * shad)
 	glEnableVertexAttribArray(shad->getShaderProgram()->attribute("vertexPosition"));
 
 	//create vbo for normals
-	glGenBuffers(1, &VBO_normal);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_normal);
+	glGenBuffers(1, &VBO_normal[_currentShaderCount]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_normal[_currentShaderCount]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * nVerts * 3, n, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(
-		shad->getShaderProgram()->attribute("vertexNormal"), // attribute
+		shad->getShaderProgram()->attribute("vertexNormalTRUC"), // attribute
 		3,                 // number of elements per vertex, here (x,y,z,1)
 		GL_FLOAT,          // the type of each element
 		GL_FALSE,          // take our values as-is
 		0,                 // no extra data between each position
 		0                  // offset of first element
 	);
-	glEnableVertexAttribArray(shad->getShaderProgram()->attribute("vertexNormal"));
+	glEnableVertexAttribArray(shad->getShaderProgram()->attribute("vertexNormalTRUC"));
 
 	// Create VBO for texture
-	glGenBuffers(1, &VBO_tex);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_tex);
+	glGenBuffers(1, &VBO_tex[_currentShaderCount]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_tex[_currentShaderCount]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * nVerts, tex, GL_STATIC_DRAW);
 	glVertexAttribPointer(
 		shad->getShaderProgram()->attribute("VertexTexCoord"), // attribute
@@ -141,11 +152,15 @@ void Sphere::InitShader(IShader * shad)
 	);
 	glEnableVertexAttribArray(shad->getShaderProgram()->attribute("VertexTexCoord"));
 
-	glGenBuffers(1, &IBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glGenBuffers(1, &IBO[_currentShaderCount]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO[_currentShaderCount]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * elements, el, GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
+
+	shad->getShaderProgram()->disable();
+
+	_currentShaderCount++;
 }
 
 void Sphere::Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection) 
@@ -161,11 +176,11 @@ void Sphere::Draw(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projection)
 	//glBindTexture(GL_TEXTURE_2D, tex_2d);
 	//glUniform1i(shaderProgram->uniform("Tex1"), 0);
 
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	int size;
-	glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
-	glDrawElements(GL_TRIANGLES, size / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(VAO[0]);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	//int size;
+	//glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+	glDrawElements(GL_TRIANGLES, elements, GL_UNSIGNED_INT, 0);
 
 	_shader->getShaderProgram()->disable();
 }
@@ -176,11 +191,11 @@ void Sphere::DrawDepth(glm::mat4 & model, glm::mat4 & view, glm::mat4 & projecti
 	{
 		depthShader->Draw(model, view, projection);
 
-		glBindVertexArray(VAO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-		int size;
-		glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
-		glDrawElements(GL_TRIANGLES, size / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(VAO[1]);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+		//int size;
+		//glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+		glDrawElements(GL_TRIANGLES, elements, GL_UNSIGNED_INT, 0);
 
 		depthShader->getShaderProgram()->disable();
 	}
@@ -247,6 +262,6 @@ void Sphere::generateVerts(float * verts, float * norms, float * tex,
 
 int Sphere::getVertexArrayHandle() 
 {
-	return this->VAO;
+	return this->VAO[0];
 }
 

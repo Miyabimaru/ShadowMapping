@@ -137,6 +137,8 @@ private:
 		glDetachShader(programId, vertexShaderId);
 		glDetachShader(programId, fragmentShaderId);
 
+		std::cout << "PROGRAM ID INIT: " << programId << std::endl;
+
 		// Check the program link status and throw a runtime_error if program linkage failed.
 		GLint programLinkSuccess = GL_FALSE;
 		glGetProgramiv(programId, GL_LINK_STATUS, &programLinkSuccess);
@@ -355,6 +357,8 @@ public:
 	{
 		// Add the attribute location value for the attributeName key
 		attributeMap[attributeName] = glGetAttribLocation(programId, attributeName.c_str());
+
+		std::cout << "ADD ATT PROG ID: " << programId << std::endl;
 
 		// Check to ensure that the shader contains an attribute with this name
 		if (attributeMap[attributeName] == -1)

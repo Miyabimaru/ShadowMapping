@@ -1,6 +1,10 @@
 #include "MyGlWindow.h"
 #include "debug.h"
 
+#include "DebugTexture.h"
+
+IDrawable * _debugDepthTexture;
+
 static double DEFAULT_VIEW_POINT[3] = { 5, 5, 5 };
 static double DEFAULT_VIEW_CENTER[3] = { 0, 0, 0 };
 static double DEFAULT_UP_VECTOR[3] = { 0, 1, 0 };
@@ -306,7 +310,7 @@ void MyGlWindow::draw(void)
 	//if (_sphere1)
 	//	_sphere1->Draw(m_model.getMatrix(), view, projection);
 
-	if (_objectList.size() > 0)
+	if (_objectList.size() > 0 || _debugDepthTexture != nullptr)
 	{
 		// 1. first render to depth map
 		glViewport(0, 0, _shadowMap->SHADOW_WIDTH, _shadowMap->SHADOW_HEIGHT);
@@ -324,17 +328,17 @@ void MyGlWindow::draw(void)
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		
 		// DEBUG RENDER DEPTH MAP
-		glViewport(0, 0, 770, 780);
+		/*glViewport(0, 0, 770, 780);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, _shadowMap->getDepthMap());
-		_shadowMap->getDebugShader()->Draw(m_model.getMatrix(), view, projection);
+		_shadowMap->getDebugShader()->Draw(m_model.getMatrix(), view, projection);*/
 		// END DEBUG
 
 		// 2. then render scene as normal with shadow mapping (using depth map)
-		glViewport(0, 0, 770, 780);
+		glViewport(0, 0, w(), h());
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glBindTexture(GL_TEXTURE_2D, _shadowMap->getDepthMap());
+		//glBindTexture(GL_TEXTURE_2D, _shadowMap->getDepthMap());
 
 		for each (IDrawable *model in _objectList)
 		{
@@ -343,6 +347,17 @@ void MyGlWindow::draw(void)
 			model->Draw(m_model.getMatrix(), view, projection);
 			m_model.glPopMatrix();
 		}
+
+		/* DEBUG DEPTH MAP */
+		m_model.glPushMatrix();
+		m_model.glTranslate(_debugDepthTexture->getPosition().x, _debugDepthTexture->getPosition().y, _debugDepthTexture->getPosition().z);
+		m_model.glRotate(90.0f, 1, 0, 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _shadowMap->getDepthMap());
+
+		_debugDepthTexture->Draw(m_model.getMatrix(), view, projection);
+		m_model.glPopMatrix();
+		/* END DEBUG DEPTH MAP */
 	}
 
 	//m_model.glPopMatrix();
@@ -376,6 +391,9 @@ void MyGlWindow::initialize()
 	_shadowMap->GenerateMap();
 	_objectList.push_back(new Sphere(1.0, 60, 60, new PhongShader(), _lightManager, _shadowMap->getShader()));
 	browser->add("Sphere");
+	_debugDepthTexture = new DebugTexture(_lightManager);
+	_debugDepthTexture->Initialise(new ShadowMapShader(true));
+	_debugDepthTexture->setPosition(glm::vec3(0, 3, 0));
 	/*_objectList.push_back(new checkeredFloor());
 	browser->add("Floor");*/
 }

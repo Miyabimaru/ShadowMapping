@@ -1,11 +1,13 @@
-#version 330 core
-layout (location = 0) in vec4 vertexPosition;
-layout (location = 2) in vec2 VertexTexCoord;
+#version 440
+in vec4 vertexPosition;
+in vec2 VertexTexCoord;
+
+uniform mat4 MVP;
 
 out vec2 TexCoords;
 
 void main()
 {
     TexCoords = VertexTexCoord;
-    gl_Position = vertexPosition;
+    gl_Position = MVP * vertexPosition;
 }

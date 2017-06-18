@@ -5,9 +5,12 @@ void PhongShader::Initialise()
 	_shaderProgram = new ShaderProgram();
 	_shaderProgram->initFromFiles("simple_phong.vert", "simple_phong.frag");
 
+	std::cout << "mdr init phong" << std::endl;
+
 	//add attributes and uniform vars
 	_shaderProgram->addAttribute("vertexPosition");
-	_shaderProgram->addAttribute("vertexNormal");
+	_shaderProgram->addAttribute("vertexNormalTRUC");
+	_shaderProgram->addAttribute("VertexTexCoord");
 	_shaderProgram->addUniform("ModelViewMatrix"); // View*Model : mat4
 	_shaderProgram->addUniform("normalMatrix"); // Normal Matrix : mat3
 	_shaderProgram->addUniform("MVP"); // Projection * View * Model : mat4
