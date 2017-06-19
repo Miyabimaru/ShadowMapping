@@ -30,6 +30,8 @@ public:
 	glm::vec3 const getPosition(void);
 	virtual void setPosition(glm::vec3 pos);
 
+	IShader * getIShader();
+
 	std::string getName(void);
 };
 

@@ -344,6 +344,12 @@ void MyGlWindow::draw(void)
 		{
 			m_model.glPushMatrix();
 			m_model.glTranslate(model->getPosition().x, model->getPosition().y, model->getPosition().z);
+
+			model->getIShader()->getShaderProgram()->use();
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, _shadowMap->getDepthMap());
+			glUniform1i(model->getIShader()->getShaderProgram()->uniform("depthMap"), 0);
+
 			model->Draw(m_model.getMatrix(), view, projection);
 			m_model.glPopMatrix();
 		}
@@ -352,8 +358,10 @@ void MyGlWindow::draw(void)
 		m_model.glPushMatrix();
 		m_model.glTranslate(_debugDepthTexture->getPosition().x, _debugDepthTexture->getPosition().y, _debugDepthTexture->getPosition().z);
 		m_model.glRotate(90.0f, 1, 0, 0);
+		_debugDepthTexture->getIShader()->getShaderProgram()->use();
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, _shadowMap->getDepthMap());
+		glUniform1i(_debugDepthTexture->getIShader()->getShaderProgram()->uniform("depthMap"), 0);
 
 		_debugDepthTexture->Draw(m_model.getMatrix(), view, projection);
 		m_model.glPopMatrix();

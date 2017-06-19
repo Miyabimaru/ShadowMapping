@@ -47,7 +47,6 @@ void ShadowMapShader::Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection
 	glUniform1f(_shaderProgram->uniform("far_plane"), far_plane);
 	glUniformMatrix4fv(_shaderProgram->uniform("model"), 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(_shaderProgram->uniform("lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-	glUniform1i(_shaderProgram->uniform("depthMap"), 0);
 }
 
 ShadowMapShader::ShadowMapShader(bool debug) : _debug(debug)

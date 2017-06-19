@@ -14,6 +14,8 @@ void PhongShader::Initialise()
 	_shaderProgram->addUniform("ModelViewMatrix"); // View*Model : mat4
 	_shaderProgram->addUniform("normalMatrix"); // Normal Matrix : mat3
 	_shaderProgram->addUniform("MVP"); // Projection * View * Model : mat4
+
+	_shaderProgram->addUniform("depthMap");
 }
 
 void PhongShader::Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection)

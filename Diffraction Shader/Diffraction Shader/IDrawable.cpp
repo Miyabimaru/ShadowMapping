@@ -32,6 +32,11 @@ void IDrawable::setPosition(glm::vec3 pos)
 	_position = pos;
 }
 
+IShader * IDrawable::getIShader()
+{
+	return _shader;
+}
+
 std::string IDrawable::getName(void)
 {
 	return _name;

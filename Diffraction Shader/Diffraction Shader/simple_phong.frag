@@ -33,6 +33,8 @@ uniform LightInfo PointLights[5];
 uniform MaterialInfo Material;
 uniform SpotLightInfo SpotLight[5];
 
+uniform sampler2D depthMap;
+
 out vec4 FragColor;
 
 
