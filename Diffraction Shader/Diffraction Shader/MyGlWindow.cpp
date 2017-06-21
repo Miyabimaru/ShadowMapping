@@ -402,6 +402,10 @@ void MyGlWindow::initialize()
 	_shadowMap->GenerateMap();
 	_objectList.push_back(new Sphere(1.0, 60, 60, new PhongShader(), _lightManager, _shadowMap->getShader()));
 	browser->add("Sphere");
+	IDrawable * s2 = new Sphere(1.0, 60, 60, new PhongShader(), _lightManager, _shadowMap->getShader());
+	s2->setPosition(glm::vec3(0, -3, 0));
+	_objectList.push_back(s2);
+	browser->add("Sphere");
 	_debugDepthTexture = new DebugTexture(_lightManager);
 	_debugDepthTexture->Initialise(new ShadowMapShader(look, up, true));
 	_debugDepthTexture->setPosition(glm::vec3(0, 3, 0));
