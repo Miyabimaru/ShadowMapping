@@ -44,7 +44,8 @@ float ShadowCalculation(vec4 LightSpacePos)
     projCoords = projCoords * 0.5 + 0.5;
 	float closestDepth = texture(depthMap, projCoords.xy).r;
 	float currentDepth = projCoords.z;
-	float bias = 0.005;
+	vec3 L = normalize(vec3(PointLights[0].Position - Position));
+	float bias = max(0.05 * (1.0 - dot(Normal, L)), 0.005);
 	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
 
 	return shadow;
