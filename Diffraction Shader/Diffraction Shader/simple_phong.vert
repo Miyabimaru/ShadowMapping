@@ -2,7 +2,7 @@
 
 in vec4 vertexPosition;
 in vec3 vertexNormalTRUC;
-in vec3 VertexTexCoord; 
+in vec2 VertexTexCoord; 
 
 // Define structures
 struct LightInfo {
@@ -40,7 +40,7 @@ void main()
 	
 	Position = P;
 	Normal = N;
-	LightSpacePos = lightSpaceMatrix * vec4(vec3(model * vertexPosition), 1.0);
+	LightSpacePos = lightSpaceMatrix * Position;
 
 	gl_Position = MVP * vertexPosition;
 }

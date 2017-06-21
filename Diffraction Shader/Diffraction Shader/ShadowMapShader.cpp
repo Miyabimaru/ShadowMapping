@@ -25,10 +25,10 @@ void ShadowMapShader::Initialise()
 
 void ShadowMapShader::Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection)
 {
-	float near_plane = 1.0f, far_plane = 7.5f;
+	float near_plane = 1.0f, far_plane = 150.0f;
 	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 
-	glm::mat4 lightView = glm::lookAt(glm::vec3(50.0f, 50.0f, 50.0f),
+	glm::mat4 lightView = glm::lookAt(glm::vec3(5.0f, 5.0f, 5.0f),
 		_look,
 		_up);
 

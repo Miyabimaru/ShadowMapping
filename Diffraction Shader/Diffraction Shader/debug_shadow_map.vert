@@ -1,5 +1,6 @@
 #version 440
 in vec4 vertexPosition;
+in vec3 vertexNormalTRUC;
 in vec2 VertexTexCoord;
 
 uniform mat4 MVP;

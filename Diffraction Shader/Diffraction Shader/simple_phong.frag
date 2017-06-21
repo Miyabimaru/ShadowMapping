@@ -66,7 +66,7 @@ void main() {
 
 		
 		vec3 diffuse = PointLights[i].Ld * Material.Kd * max(dot(L,Normal),0);
-		vec3 spec = PointLights[i].Ls * Material.Ks * pow(max(dot(H,Normal), 0.0), Material.Shiness);
+		vec3 spec = PointLights[i].Ls * Material.Ks * pow(max(dot(Normal, H), 0.0), Material.Shiness);
 
 		finalColor = finalColor +  diffuse + spec;
 	}
@@ -95,7 +95,7 @@ void main() {
 
 	float shadow = ShadowCalculation(LightSpacePos);
 
-	vec3 LightIntensity = (ambient + (1.0 - shadow)) * finalColor;
+	vec3 LightIntensity = ambient + finalColor;
 
 	//FragColor = vec4(1.0, 1.0, 1.0, 1.0);
     FragColor = vec4(LightIntensity, 1.0);

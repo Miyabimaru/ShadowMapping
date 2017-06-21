@@ -39,13 +39,13 @@ void DebugTexture::Initialise(IShader * shader)
 
 	// Vertices
 	float v[] = {
-		1.0f, -0.5f,  1.0f,
-		-1.0f, -0.5f,  1.0f,
-		-1.0f, -0.5f, -1.0f,
+		1.0f, 0.0f,  1.0f,
+		-1.0f, 0.0f,  1.0f,
+		-1.0f, 0.0f, -1.0f,
 
-		1.0f, -0.5f,  1.0f,
-		-1.0f, -0.5f, -1.0f,
-		1.0f, -0.5f, -1.0f
+		1.0f, 0.0f,  1.0f,
+		-1.0f, 0.0f, -1.0f,
+		1.0f, 0.0f, -1.0f
 	};
 	// Normals
 	float n[] = {
@@ -60,13 +60,13 @@ void DebugTexture::Initialise(IShader * shader)
 
 	// Tex coords
 	float tex[] = {
+		1.0f,  1.0f,
 		1.0f,  0.0f,
-		0.0f,  0.0f,
-		0.0f, 1.0f,
+		0.0f, 0.0f,
 
-		1.0f,  0.0f,
-		0.0f, 1.0f,
-		1.0f, 1.0f
+		1.0f,  1.0f,
+		0.0f, 0.0f,
+		0.0f, 1.0f
 	};
 
 	//create vbo for vertices
