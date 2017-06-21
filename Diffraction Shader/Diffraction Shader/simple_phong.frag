@@ -95,7 +95,7 @@ void main() {
 
 	float shadow = ShadowCalculation(LightSpacePos);
 
-	vec3 LightIntensity = ambient + finalColor;
+	vec3 LightIntensity = (ambient + (1.0 - shadow) * finalColor);
 
 	//FragColor = vec4(1.0, 1.0, 1.0, 1.0);
     FragColor = vec4(LightIntensity, 1.0);

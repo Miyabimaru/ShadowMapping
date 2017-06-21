@@ -301,15 +301,6 @@ void MyGlWindow::draw(void)
 
 	glm::mat4 projection = glm::perspective(45.0f, 1.0f*w() / h(), 0.1f, 500.0f);
 
-	//if (m_floor)
-	//	m_floor->draw(m_model.getMatrix(), view, projection);
-
-	//m_model.glPushMatrix();
-	//m_model.glTranslate(0, 1, 0);
-
-	//if (_sphere1)
-	//	_sphere1->Draw(m_model.getMatrix(), view, projection);
-
 	if (_objectList.size() > 0 || _debugDepthTexture != nullptr)
 	{
 		// 1. first render to depth map
@@ -400,7 +391,9 @@ void MyGlWindow::initialize()
 
 	_shadowMap = new ShadowMap(look, up);
 	_shadowMap->GenerateMap();
-	_objectList.push_back(new Sphere(1.0, 60, 60, new PhongShader(), _lightManager, _shadowMap->getShader()));
+	IDrawable * s1 = new Sphere(1.0, 60, 60, new PhongShader(), _lightManager, _shadowMap->getShader());
+	s1->setPosition(glm::vec3(1, 0, 1));
+	_objectList.push_back(s1);
 	browser->add("Sphere");
 	IDrawable * s2 = new Sphere(1.0, 60, 60, new PhongShader(), _lightManager, _shadowMap->getShader());
 	s2->setPosition(glm::vec3(0, -3, 0));

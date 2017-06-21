@@ -38,8 +38,8 @@ void ShadowMapShader::Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection
 
 	_shaderProgram->use();
 
-	if (_debug)
-		std::cout << "DRAW EN DEBUG" << std::endl;
+	//if (_debug)
+		//std::cout << "DRAW EN DEBUG" << std::endl;
 
 	if (_debug)
 		glUniformMatrix4fv(_shaderProgram->uniform("MVP"), 1, GL_FALSE, glm::value_ptr(mvp));
