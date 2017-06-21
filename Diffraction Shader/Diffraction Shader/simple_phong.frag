@@ -2,6 +2,7 @@
 
 in vec4 Position;
 in vec3 Normal;
+in vec4 LightSpacePos;
 
 // Define structures
 struct LightInfo {
@@ -37,6 +38,17 @@ uniform sampler2D depthMap;
 
 out vec4 FragColor;
 
+float ShadowCalculation(vec4 LightSpacePos)
+{
+    vec3 projCoords = LightSpacePos.xyz / LightSpacePos.w;
+    projCoords = projCoords * 0.5 + 0.5;
+	float closestDepth = texture(depthMap, projCoords.xy).r;
+	float currentDepth = projCoords.z;
+	float bias = 0.005;
+	float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+
+	return shadow;
+}
 
 void main() {
 	vec3 finalColor = vec3(0,0,0);
@@ -60,27 +72,29 @@ void main() {
 
 	//finalColor = vec3(0,0,0); // IGNORE GLOBAL LIGHTING FOR DEBUG PURPOSE
 
-	for (int i=0; i<5; i++)
-	{
-		vec3 L = normalize(vec3(SpotLight[i].Position - Position));
+	//for (int i=0; i<5; i++)
+	//{
+	//	vec3 L = normalize(vec3(SpotLight[i].Position - Position));
+	//
+	//	vec3 R = normalize(reflect(-L,Normal));
+	//	vec3 V = normalize(vec3(-Position));
+	//
+	//	vec3 H = normalize(V + L);
+	//
+	//	float spotEffect = pow(dot(-L, SpotLight[i].Direction), SpotLight[i].Exponent);
+	//	vec3 sp = normalize(-L);
+	//	float sp_dot_d = dot(sp, SpotLight[i].Direction);
+	//	float angle = acos(sp_dot_d);
+	//	vec3 diffuse_spot = SpotLight[i].Ld * Material.Kd * max(dot(L,Normal),0);
+	//	vec3 spec_spot = SpotLight[i].Ls * Material.Ks * pow(max(dot(H,Normal), 0.0), Material.Shiness);
+	//
+	//	if (angle <= radians(SpotLight[i].Cutoff))
+	//		finalColor = finalColor + spotEffect * SpotLight[i].La * (diffuse_spot + spec_spot);
+	//}
 
-		vec3 R = normalize(reflect(-L,Normal));
-		vec3 V = normalize(vec3(-Position));
+	float shadow = ShadowCalculation(LightSpacePos);
 
-		vec3 H = normalize(V + L);
-
-		float spotEffect = pow(dot(-L, SpotLight[i].Direction), SpotLight[i].Exponent);
-		vec3 sp = normalize(-L);
-		float sp_dot_d = dot(sp, SpotLight[i].Direction);
-		float angle = acos(sp_dot_d);
-		vec3 diffuse_spot = SpotLight[i].Ld * Material.Kd * max(dot(L,Normal),0);
-		vec3 spec_spot = SpotLight[i].Ls * Material.Ks * pow(max(dot(H,Normal), 0.0), Material.Shiness);
-
-		if (angle <= radians(SpotLight[i].Cutoff))
-			finalColor = finalColor + spotEffect * SpotLight[i].La * (diffuse_spot + spec_spot);
-	}
-
-	vec3 LightIntensity = ambient + finalColor;
+	vec3 LightIntensity = (ambient + (1.0 - shadow)) * finalColor;
 
 	//FragColor = vec4(1.0, 1.0, 1.0, 1.0);
     FragColor = vec4(LightIntensity, 1.0);

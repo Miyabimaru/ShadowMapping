@@ -16,7 +16,7 @@
 class ShadowMap
 {
 public:
-	ShadowMap();
+	ShadowMap(glm::vec3 look, glm::vec3 up);
 	~ShadowMap();
 
 public:

@@ -15,6 +15,8 @@
 class ShadowMapShader : public IShader
 {
 private:
+	glm::vec3 _look;
+	glm::vec3 _up;
 	bool _debug;
 
 public:
@@ -22,7 +24,7 @@ public:
 	virtual void Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection);
 
 public:
-	ShadowMapShader(bool debug = false);
+	ShadowMapShader(glm::vec3 look, glm::vec3 up, bool debug = false);
 	~ShadowMapShader();
 };
 

@@ -395,12 +395,15 @@ void MyGlWindow::initialize()
 		glm::vec3(1, 0, 0),
 		glm::vec3(1, 0, 0)
 	);*/
-	_shadowMap = new ShadowMap();
+	glm::vec3 look = m_viewer->getViewCenter();
+	glm::vec3 up = m_viewer->getUpVector();
+
+	_shadowMap = new ShadowMap(look, up);
 	_shadowMap->GenerateMap();
 	_objectList.push_back(new Sphere(1.0, 60, 60, new PhongShader(), _lightManager, _shadowMap->getShader()));
 	browser->add("Sphere");
 	_debugDepthTexture = new DebugTexture(_lightManager);
-	_debugDepthTexture->Initialise(new ShadowMapShader(true));
+	_debugDepthTexture->Initialise(new ShadowMapShader(look, up, true));
 	_debugDepthTexture->setPosition(glm::vec3(0, 3, 0));
 	/*_objectList.push_back(new checkeredFloor());
 	browser->add("Floor");*/

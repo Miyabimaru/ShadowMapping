@@ -1,8 +1,8 @@
 #include "ShadowMap.h"
 
-ShadowMap::ShadowMap()
+ShadowMap::ShadowMap(glm::vec3 look, glm::vec3 up)
 {
-	_shader = new ShadowMapShader();
+	_shader = new ShadowMapShader(look, up);
 	_shader->Initialise();
 
 	//_debugShader = new ShadowMapShader(true);

@@ -28,9 +28,9 @@ void ShadowMapShader::Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection
 	float near_plane = 1.0f, far_plane = 7.5f;
 	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 
-	glm::mat4 lightView = glm::lookAt(glm::vec3(-2.0f, 4.0f, -1.0f),
-		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 lightView = glm::lookAt(glm::vec3(50.0f, 50.0f, 50.0f),
+		_look,
+		_up);
 
 	glm::mat4 lightSpaceMatrix = lightProjection * lightView;
 
@@ -49,7 +49,7 @@ void ShadowMapShader::Draw(glm::mat4 model, glm::mat4 view, glm::mat4 projection
 	glUniformMatrix4fv(_shaderProgram->uniform("lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 }
 
-ShadowMapShader::ShadowMapShader(bool debug) : _debug(debug)
+ShadowMapShader::ShadowMapShader(glm::vec3 look, glm::vec3 up, bool debug) : _look(look), _up(up), _debug(debug)
 {
 }
 

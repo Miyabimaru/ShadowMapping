@@ -23,20 +23,24 @@ struct MaterialInfo {
 uniform LightInfo PointLights[5];
 uniform MaterialInfo Material;
 
+uniform mat4 model;
 uniform mat4 MVP;
 uniform mat3 normalMatrix; 
 uniform mat4 ModelViewMatrix;
+uniform mat4 lightSpaceMatrix;
 
 out vec4 Position;
 out vec3 Normal;
+out vec4 LightSpacePos;
 
 void main()
 {
 	vec3 N = normalize( normalMatrix * vertexNormalTRUC);
-	vec4 P = ModelViewMatrix * vertexPosition;
+	vec4 P = model * vertexPosition;
 	
 	Position = P;
 	Normal = N;
+	LightSpacePos = lightSpaceMatrix * vec4(vec3(model * vertexPosition), 1.0);
 
 	gl_Position = MVP * vertexPosition;
 }
