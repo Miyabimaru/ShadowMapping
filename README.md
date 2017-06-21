@@ -1,7 +1,7 @@
-# DiffractionShader
+# ShadowMapping
 Final term project for the Computer Graphics class at Keimyung University.
 
-Simulation of the Diffraction on 3D meshes using OpenGL.
+Simulation of the Shadows using the shadow mapping with OpenGL.
 
 ### References
-NVIDIA GPU Gems: https://developer.nvidia.com/gpugems/GPUGems/gpugems_ch08.html
+LearnOpenGL: https://learnopengl.com/#!Advanced-Lighting/Shadows/Shadow-Mapping
